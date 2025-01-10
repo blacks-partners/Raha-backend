@@ -28,7 +28,7 @@ public class UserRepository {
         return user;
     };
 
-    public User load(int id) {
+    public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
