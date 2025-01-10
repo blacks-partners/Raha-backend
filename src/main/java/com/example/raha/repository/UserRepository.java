@@ -11,18 +11,17 @@ import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
     private final NamedParameterJdbcTemplate template;
 
-    private static final RowMapper<User> USER_ROWMAPPER = (rs, i) -> {
+    private static final RowMapper<User> USER_NOPASS_ROWMAPPER = (rs, i) -> {
         User user = new User();
-        user.setId(rs.getInt("id"));
-        // user.setName(rs.getString("name"));
+        user.setUserId(rs.getInt("id"));
+        user.setName(rs.getString("name"));
         user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         user.setCreatedAt(rs.getTimestamp("update_at").toLocalDateTime());
@@ -30,11 +29,11 @@ public class UserRepository {
     };
 
     public User load(int id) {
-        String sql = "SELECT * FROM users WHERE id=:id";
+        String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 
-        return template.queryForObject(sql, param, USER_ROWMAPPER);
+        return template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
 
     }
 

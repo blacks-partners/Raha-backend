@@ -1,10 +1,10 @@
-package com.example.rafa.service;
+package com.example.raha.service;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CommnetService {
 
 }
