@@ -1,4 +1,4 @@
-package com.example.rafa.repository;
+package com.example.raha.repository;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.example.rafa.domain.User;
+import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
 

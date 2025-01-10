@@ -1,10 +1,11 @@
-package com.example.rafa.controller;
+package com.example.raha.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ArticleController {
 
 }

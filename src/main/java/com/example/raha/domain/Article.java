@@ -1,4 +1,4 @@
-package com.example.rafa.domain;
+package com.example.raha.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
