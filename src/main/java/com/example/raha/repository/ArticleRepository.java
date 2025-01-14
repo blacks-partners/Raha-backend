@@ -1,6 +1,5 @@
 package com.example.raha.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
