@@ -28,6 +28,17 @@ public class UserRepository {
         return user;
     };
 
+    private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
+        User user = USER_NOPASS_ROWMAPPER.mapRow(rs, i);
+        user.setPassword(rs.getString("password"));
+        return user;
+    };
+
+    /**
+     * ユーザー情報を取得
+     * @param id ID
+     * @return ユーザー情報
+     */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
 
@@ -37,4 +48,19 @@ public class UserRepository {
 
     }
 
+    /**
+     * メールアドレスからユーザー情報を取得
+     * @param email メールアドレス
+     * @return ユーザー情報
+     */
+    public User loadByEmail(String email) {
+        String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE email=:email";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
+        try {
+            return template.queryForObject(sql, param, USER_ROW_MAPPER);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
