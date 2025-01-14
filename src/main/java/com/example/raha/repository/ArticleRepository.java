@@ -48,7 +48,7 @@ public class ArticleRepository {
     public List<Article> findAll() {
         List<Article> articleList = new ArrayList<>();
 
-        String sql = "SELECT a.id as a_id,a.title as a_title,a.context as a_context,a.created_at as a_created_at,a.update_at as a_update_at,u.id as u_id, u.name as u_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id ORDER BY a.created_at DESC,a.id DESC";
+        String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_context,a.created_at as a_created_at,a.update_at as a_update_at,u.id as u_id, u.name as u_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id ORDER BY a.created_at DESC,a.id DESC";
 
         articleList = jdbcTemplate.query(sql, ARTICLE_ROWMAPPER);
 
