@@ -46,7 +46,7 @@ public class UserController {
     public Integer register(@RequestBody User user){
         User registeredUser = service.findByEmail(user.getEmail());
         if(registeredUser != null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "入力されたメールアドレスは既に登録されています");
         }
         service.register(user);
         return user.getUserId();
