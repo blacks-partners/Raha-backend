@@ -53,7 +53,7 @@ public class UserRepository {
      * @return ユーザー情報
      */
     public User loadByEmail(String email) {
-        String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE email=:email";
+        String sql = "SELECT id,name,email,password,introduction,created_at,update_at FROM users WHERE email=:email";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
         try {
