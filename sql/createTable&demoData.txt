@@ -1,9 +1,5 @@
 -- @auther KANAMARU
 
--- DB作成
-CREATE DATABASE raha;
-
-
 -- ユーザーテーブル作成
 drop table if exists users cascade
 
