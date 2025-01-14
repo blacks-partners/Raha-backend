@@ -27,7 +27,7 @@ public class ArticleRepository {
         Article article = new Article();
         article.setArticleId(rs.getInt("a_id"));
         article.setTitle(rs.getString("a_title"));
-        article.setContent(rs.getString("a_context"));
+        article.setContent(rs.getString("a_content"));
         article.setCreatedAt(rs.getTimestamp("a_created_at").toLocalDateTime());
         article.setUpdatedAt(rs.getTimestamp("a_update_at").toLocalDateTime());
         article.setCommentList(null);
