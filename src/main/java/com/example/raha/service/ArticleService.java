@@ -29,8 +29,7 @@ public class ArticleService {
      * @return articleList 記事リスト
      */
     public List<Article> findAll() {
-        List<Article> articleList = new ArrayList<>();
-        articleList = articleRepository.findAll();
+        List<Article> articleList = articleRepository.findAll();
         return articleList;
     }
 

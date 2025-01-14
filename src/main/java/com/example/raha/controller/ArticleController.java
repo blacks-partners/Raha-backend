@@ -31,8 +31,7 @@ public class ArticleController {
      */
     @GetMapping("")
     public List<Article> findAllArticles() {
-        List<Article> articleList = new ArrayList<>();
-        articleList = articleService.findAll();
+        List<Article> articleList = articleService.findAll();
 
         return articleList;
     }

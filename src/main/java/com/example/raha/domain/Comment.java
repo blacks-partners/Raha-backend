@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Comment {
 
-    private Integer id;
+    private Integer commentId;
     private User user;
     private String content;
     private LocalDateTime createdAt;
