@@ -5,11 +5,19 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
+
+/**
+ * ユーザーのRepositoryクラス。
+ * 
+ * @author nakaryunosuke
+ */
 
 @Repository
 @RequiredArgsConstructor
@@ -24,17 +32,61 @@ public class UserRepository {
         user.setEmail(rs.getString("email"));
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setCreatedAt(rs.getTimestamp("update_at").toLocalDateTime());
+        user.setUpdatedAt(rs.getTimestamp("update_at").toLocalDateTime());
         return user;
     };
 
+    /**
+     * ユーザー情報の取得。
+     * 
+     * @param id
+     * @return User
+     */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 
         return template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
+    }
 
+    /**
+     * ユーザー登録処理。
+     * 
+     * @param user
+     * @return ユーザーID
+     */
+    @SuppressWarnings("null")
+    public Integer insert(User user) {
+        String sql = "INSERT INTO users(name,email,password,introduction) VALUES(:name, :email, :password, :introduction);";
+        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String[] keyColumnName = { "id" };
+
+        try {
+            template.update(sql, param, keyHolder, keyColumnName);
+            Integer id = keyHolder.getKey().intValue();
+            user.setUserId(id);
+            return user.getUserId();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * メールアドレスが存在するかの確認。
+     * 
+     * @param email
+     * @return Userかnull。
+     */
+    public User findByEmail(@PathVariable String email) {
+        String Sql = "SELECT * FROM users WHERE email = :email;";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
+        try {
+            return template.queryForObject(Sql, param, USER_NOPASS_ROWMAPPER);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
