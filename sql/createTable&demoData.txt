@@ -1,3 +1,8 @@
+-- @auther KANAMARU
+
+-- ユーザーテーブル作成
+drop table if exists users cascade;
+
 CREATE TABLE  users
 (id serial PRIMARY KEY,
 name varchar(50) NOT NULL,
@@ -6,17 +11,25 @@ password varchar(100) NOT NULL,
 introduction varchar(150),
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
-)
+);
+
+
+
+-- 記事テーブル作成
+drop table if exists articles cascade;
 
 CREATE TABLE articles (
     id serial PRIMARY KEY,
         title varchar(50) NOT NULL,
-    context varchar(10000) NOT NULL,
+    content varchar(10000) NOT NULL,
     user_id integer NOT NULL, -- user_idをカラムとして定義し、NOT NULLを設定
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- コメントテーブル作成
+drop table if exists comments cascade;
 
 CREATE TABLE comments(
 id serial PRIMARY KEY,
@@ -27,20 +40,21 @@ created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
 CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id)
-)
+);
 
 
+-- ユーザーテーブルにデモ情報の追加
 INSERT INTO users (name,email, password, Introduction)
 VALUES 
 (
     '田中太郎',
     'demo_user@example.com', 
-    '$2b$10$C4a7dJm5H1j7kNxU6KMHyOqN8dV5cz8NVYkz.FvIb5s2oO/rCjvG2', 
+    '$2a$08$byIzNL7VbGIs6xVIi05.lOPtZa3CxnYVIzmGbI.Rnt3y3F98VwtO6',  --pw:tanaka
     'こんにちは、デモユーザーです。'
 );
 
-
-INSERT INTO articles (title, context, user_id)
+-- 記事テーブルにデモ情報の追加
+INSERT INTO articles (title, content, user_id)
 VALUES
 (
     'はじめての投稿',
@@ -68,7 +82,7 @@ VALUES
     1
 );
 
-
+-- コメントテーブルにデモ情報の追加
 INSERT INTO comments (user_id, article_id, content)
 VALUES
 (1, 1, 'この記事はとても興味深いですね。もっと詳細が知りたいです！'),
