@@ -30,7 +30,8 @@ public class UserService {
      * @return User
      */
     public User load(Integer id) {
-        return repository.load(id);
+        User user = repository.load(id);
+        return user;
 
     }
 
@@ -41,7 +42,8 @@ public class UserService {
      */
     public Integer register(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repository.insert(user);
+        Integer id = repository.insert(user);
+        return id;
     }
 
     /**
@@ -53,7 +55,8 @@ public class UserService {
         if(email == null){
             return null;
         }
-        return repository.findByEmail(email);
+        User user = repository.findByEmail(email);
+        return user;
     }
 
 }
