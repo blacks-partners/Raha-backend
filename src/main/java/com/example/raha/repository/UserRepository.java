@@ -1,5 +1,6 @@
 package com.example.raha.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class UserRepository {
         user.setEmail(rs.getString("email"));
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setUpdatedAt(rs.getTimestamp("update_at").toLocalDateTime());
+        user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return user;
     };
 
@@ -43,10 +43,8 @@ public class UserRepository {
      * @return User
      */
     public User load(Integer id) {
-        String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
-
+        String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
-
         return template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
     }
 
@@ -60,17 +58,13 @@ public class UserRepository {
     public Integer insert(User user) {
         String sql = "INSERT INTO users(name,email,password,introduction) VALUES(:name, :email, :password, :introduction);";
         SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
-
-        try {
-            template.update(sql, param, keyHolder, keyColumnName);
-            Integer id = keyHolder.getKey().intValue();
-            user.setUserId(id);
-            return user.getUserId();
-        } catch (Exception e) {
-            return null;
-        }
+        template.update(sql, param, keyHolder, keyColumnName);
+        Integer id = keyHolder.getKey().intValue();
+        user.setUserId(id);
+        return id;
     }
 
     /**
@@ -79,12 +73,13 @@ public class UserRepository {
      * @param email
      * @return Userかnull。
      */
-    public User findByEmail(@PathVariable String email) {
-        String Sql = "SELECT * FROM users WHERE email = :email;";
+    public User findByEmail(String email) {
+        String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
         SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
         try {
-            return template.queryForObject(Sql, param, USER_NOPASS_ROWMAPPER);
-        } catch (Exception e) {
+            User user = template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
+            return user;
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
