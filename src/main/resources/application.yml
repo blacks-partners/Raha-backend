@@ -4,3 +4,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/Raha
     username: postgres
     password: postgres
+jwt:
+  secret: "mC+gCDTcFDFlbEvVr67QqzGf5Gi+VPVoxPuSj7C1cj4="
