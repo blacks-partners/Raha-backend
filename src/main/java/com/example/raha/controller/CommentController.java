@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.raha.domain.Comment;
+import com.example.raha.form.CommentForm;
 import com.example.raha.service.CommentService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("")
-    public void insertComment(@RequestBody String content, Integer userId, Integer articleId) {
-        commentService.insert(content, userId, articleId);
+    public void insertComment(@RequestBody CommentForm comment) {
+        commentService.insert(comment);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.domain.Comment;
+import com.example.raha.form.CommentForm;
 import com.example.raha.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class CommentService {
      * @param comment
      * @return
      */
-    public void insert(String content, Integer userId, Integer articleId) {
-        commentRepository.insert(content, userId, articleId);
+    public void insert(CommentForm comment) {
+        commentRepository.insert(comment);
     }
 }

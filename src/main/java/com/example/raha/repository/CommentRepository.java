@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.raha.domain.Comment;
+import com.example.raha.form.CommentForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,10 +39,9 @@ public class CommentRepository {
      * 
      * @param comment
      */
-    public void insert(String content, Integer userId, Integer articleId) {
+    public void insert(CommentForm comment) {
         String sql = "INSERT INTO comments (content, user_id, article_id) VALUES (:content, :userId, :articleId)";
-        SqlParameterSource param = new MapSqlParameterSource().addValue("content", content).addValue("userId", userId)
-                .addValue("articleId", articleId);
+        SqlParameterSource param = new BeanPropertySqlParameterSource(comment);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
         jdbcTemplate.update(sql, param, keyHolder, keyColumnName);
