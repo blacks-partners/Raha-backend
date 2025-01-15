@@ -3,7 +3,6 @@ package com.example.raha.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.raha.domain.Comment;
 import com.example.raha.form.CommentForm;
 import com.example.raha.repository.CommentRepository;
 

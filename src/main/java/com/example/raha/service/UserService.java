@@ -17,4 +17,15 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository repository;
+
+    /**
+     * ユーザー情報詳細の取得
+     * 
+     * @return user ユーザー情報
+     */
+    public User load(Integer id) {
+        return repository.load(id);
+
+    }
+
 }

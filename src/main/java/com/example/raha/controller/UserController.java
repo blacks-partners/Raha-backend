@@ -19,4 +19,18 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
+    private final UserService service;
+
+    /**
+     * ユーザー情報詳細の取得
+     * 
+     * @return user ユーザー情報
+     */
+    @GetMapping("/{userId}")
+    public User userDetails(@PathVariable Integer userId) {
+        User user = service.load(userId);
+        return user;
+
+    }
 }
