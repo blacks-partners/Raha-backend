@@ -2,6 +2,8 @@ package com.example.raha.service;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,12 @@ public class ArticleService {
     public List<Article> findAll() {
         List<Article> articleList = articleRepository.findAll();
         return articleList;
+    }
+
+    public Article articleDetals(Integer articleId) {
+        Article article = articleRepository.articleDetals(articleId);
+
+        return article;
     }
 
 }
