@@ -37,19 +37,4 @@ public class UserController {
         return user;
     }
 
-    /**
-     * ユーザー登録をする。
-     * @param user
-     * @return ユーザーIDを返す。
-     */
-    @PostMapping("/register")
-    public Integer register(@RequestBody User user){
-        User registeredUser = service.findByEmail(user.getEmail());
-        if(registeredUser != null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "入力されたメールアドレスは既に登録されています");
-        }
-        service.register(user);
-        return user.getUserId();
-    }
-
 }
