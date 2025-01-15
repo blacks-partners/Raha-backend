@@ -3,6 +3,7 @@ package com.example.raha.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,10 +25,11 @@ public class AccountController {
 
     /**
      * ユーザー登録をする。
-     * @param user
+     * @param UserForm
      * @return ユーザーIDを返す。
      */
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public Integer register(@RequestBody UserForm form){
         User registeredUser = service.findByEmail(form.getEmail());
         if(registeredUser != null){
