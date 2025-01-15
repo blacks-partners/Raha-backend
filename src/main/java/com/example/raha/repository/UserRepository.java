@@ -23,7 +23,7 @@ public class UserRepository {
         user.setEmail(rs.getString("email"));
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setCreatedAt(rs.getTimestamp("update_at").toLocalDateTime());
+        user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return user;
     };
 
@@ -40,7 +40,7 @@ public class UserRepository {
      * @return ユーザー情報
      */
     public User load(Integer id) {
-        String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
+        String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 
@@ -54,12 +54,13 @@ public class UserRepository {
      * @return ユーザー情報
      */
     public User loadByEmail(String email) {
-        String sql = "SELECT id,name,email,password,introduction,created_at,update_at FROM users WHERE email=:email";
+        String sql = "SELECT id,name,email,password,introduction,created_at,updated_at FROM users WHERE email=:email";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
         try {
             return template.queryForObject(sql, param, USER_ROW_MAPPER);
         } catch (Exception e) {
+            System.out.println(e);
             return null;
         }
     }
