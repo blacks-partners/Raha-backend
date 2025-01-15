@@ -32,8 +32,14 @@ public class ArticleService {
         return articleList;
     }
 
-    public Article articleDetals(Integer articleId) {
-        Article article = articleRepository.articleDetals(articleId);
+    /**
+     * 記事詳細情報の取得
+     * 
+     * @param articleId 記事ID
+     * @return article 記事+コメント情報
+     */
+    public Article articleDetails(Integer articleId) {
+        Article article = articleRepository.articleDetails(articleId);
 
         return article;
     }
