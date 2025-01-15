@@ -24,9 +24,9 @@ public class CommentService {
      * コメント情報追加
      * 
      * @param comment
-     * @return 
+     * @return
      */
-    public Comment insert(Comment comment) {
-        return commentRepository.insert(comment);
+    public void insert(String content, Integer userId, Integer articleId) {
+        commentRepository.insert(content, userId, articleId);
     }
 }

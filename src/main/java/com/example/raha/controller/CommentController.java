@@ -23,8 +23,8 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/insert")
-    public Comment InsertComment(@RequestBody Comment comment) {
-        return commentService.insert(comment);
+    @PostMapping("")
+    public void insertComment(@RequestBody String content, Integer userId, Integer articleId) {
+        commentService.insert(content, userId, articleId);
     }
 }
