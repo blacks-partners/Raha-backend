@@ -32,7 +32,6 @@ public class AccountController {
         if(registeredUser != null){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "入力されたメールアドレスは既に登録されています");
         }
-        service.register(user);
-        return user.getUserId();
+        return service.register(user);
     }
 }
