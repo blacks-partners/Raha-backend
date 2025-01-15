@@ -3,6 +3,7 @@ package com.example.raha.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +34,19 @@ public class ArticleController {
         List<Article> articleList = articleService.findAll();
 
         return articleList;
+    }
+
+    /**
+     * 記事詳細情報の取得
+     * 
+     * @param articleId 記事ID
+     * @return article 記事+コメント情報
+     */
+    @GetMapping("/{articleId}")
+    public Article details(@PathVariable Integer articleId) {
+        Article article = articleService.articleDetails(articleId);
+
+        return article;
     }
 
 }
