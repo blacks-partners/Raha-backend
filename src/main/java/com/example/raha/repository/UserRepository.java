@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import com.example.raha.domain.User;
+import com.example.raha.form.UserForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,15 +57,14 @@ public class UserRepository {
      * @return ユーザーID
      */
     @SuppressWarnings("null")
-    public Integer insert(User user) {
-        String sql = "INSERT INTO users(name,email,password,introduction) VALUES(:name, :email, :password, :introduction);";
-        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+    public Integer insert(UserForm form) {
+        String sql = "INSERT INTO users(name,email,password) VALUES(:name, :email, :password);";
+        SqlParameterSource param = new BeanPropertySqlParameterSource(form);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
         template.update(sql, param, keyHolder, keyColumnName);
         Integer id = keyHolder.getKey().intValue();
-        user.setUserId(id);
         return id;
     }
 
