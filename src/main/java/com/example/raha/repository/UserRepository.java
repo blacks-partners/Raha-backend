@@ -27,6 +27,7 @@ public class UserRepository {
         return user;
     };
 
+    @SuppressWarnings("null")
     private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
         User user = USER_NOPASS_ROWMAPPER.mapRow(rs, i);
         user.setPassword(rs.getString("password"));
