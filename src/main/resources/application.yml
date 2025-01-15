@@ -5,4 +5,4 @@ spring:
     username: postgres
     password: postgres
 jwt:
-  secret: "mC+gCDTcFDFlbEvVr67QqzGf5Gi+VPVoxPuSj7C1cj4="
+  secret: ${JWT_SECRET:"mC+gCDTcFDFlbEvVr67QqzGf5Gi+VPVoxPuSj7C1cj4="}

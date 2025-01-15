@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,9 +16,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.raha.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final AuthorizeFilter authorizeFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +35,8 @@ public class SecurityConfig {
                 .requestMatchers("/login").permitAll()
                 .anyRequest().authenticated());
 
-        http.addFilterBefore(new AuthorizeFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 

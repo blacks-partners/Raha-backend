@@ -3,6 +3,8 @@ package com.example.raha.config;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -22,6 +24,10 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AuthorizeFilter extends OncePerRequestFilter {
     private final AntPathRequestMatcher matcher = new AntPathRequestMatcher("login");
 
+    @Autowired
+    @Value("${jwt.secret}")
+    private String secret;
+
     @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -32,9 +38,8 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-         
             
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256("__secret__")).build()
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
                     .verify(xAuthToken.substring(7));
             String username = decodedJWT.getClaim("username").toString();
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>()));
