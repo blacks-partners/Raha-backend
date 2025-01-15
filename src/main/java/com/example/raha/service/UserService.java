@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
@@ -42,8 +41,7 @@ public class UserService {
      */
     public Integer register(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        repository.insert(user);
-        return user.getUserId();
+        return repository.insert(user);
     }
 
     /**
@@ -51,12 +49,11 @@ public class UserService {
      * @param email
      * @return user
      */
-    public User findByEmail(@PathVariable String email){
-        try {
-            return repository.findByEmail(email);
-        } catch (Exception e) {
+    public User findByEmail(String email){
+        if(email == null){
             return null;
         }
+        return repository.findByEmail(email);
     }
 
 }
