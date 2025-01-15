@@ -2,6 +2,7 @@ package com.example.raha.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,10 +30,12 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
+        // CORSの設定
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/login", "/register").permitAll()
+                .requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter.class)
@@ -45,6 +48,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // ユーザー情報の取得、パスワードの照合を行う
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
