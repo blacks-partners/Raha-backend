@@ -8,11 +8,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.raha.domain.Article;
 import com.example.raha.domain.Comment;
 import com.example.raha.domain.User;
+import com.example.raha.form.ArticleForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -121,6 +124,31 @@ public class ArticleRepository {
         Article article = jdbcTemplate.query(sql, param, ARTICLE_RESULTSET);
 
         return article;
+    }
+
+    /**
+     * 投稿された記事内容を登録
+     * 
+     * @param article 登録する記事内容
+     * @return articleId 自動採番されたid
+     */
+    @SuppressWarnings("null")
+    public Integer insert(ArticleForm article) {
+        String sql = "INSERT INTO articles (title,content,user_id) VALUES (:title,:content,:userId)";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
+                .addValue("content", article.getContent())
+                .addValue("userId", article.getUserId());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        String[] keyColumnName = { "id" };
+
+        jdbcTemplate.update(sql, param, keyHolder, keyColumnName);
+
+        Integer articleId = keyHolder.getKey().intValue();
+
+        return articleId;
     }
 
 }

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.raha.domain.Article;
+import com.example.raha.form.ArticleForm;
 import com.example.raha.repository.ArticleRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -42,6 +42,19 @@ public class ArticleService {
         Article article = articleRepository.articleDetails(articleId);
 
         return article;
+    }
+
+    /**
+     * 投稿された記事内容を登録
+     * 
+     * @param article 登録する記事内容
+     * @return articleId 自動採番されたid
+     */
+    public Integer insert(ArticleForm article) {
+
+        Integer articleId = articleRepository.insert(article);
+
+        return articleId;
     }
 
 }
