@@ -17,12 +17,12 @@ import com.example.raha.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * ログインコントローラー
- * @author tomoyahosoda
+ * アカウントコントローラー
+ * @author hosodatomoya
  */
 @RestController
 @RequiredArgsConstructor
-public class LoginController {
+public class AccountController {
     private final UserService service;
     private final PasswordEncoder encoder;
 
