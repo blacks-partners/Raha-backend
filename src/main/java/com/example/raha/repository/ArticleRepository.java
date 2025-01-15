@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.raha.domain.Article;
 import com.example.raha.domain.Comment;
@@ -149,6 +150,22 @@ public class ArticleRepository {
         Integer articleId = keyHolder.getKey().intValue();
 
         return articleId;
+    }
+
+    /**
+     * 記事内容の更新
+     * 
+     * @param article   更新する気情報
+     * @param articleId 対象の記事ID
+     */
+    public void update(ArticleForm article, Integer articleId) {
+        String sql = "UPDATE articles SET title=:title,content=:content WHERE id=:id";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
+                .addValue("content", article.getContent())
+                .addValue("id", articleId);
+        jdbcTemplate.update(sql, param);
+
     }
 
 }
