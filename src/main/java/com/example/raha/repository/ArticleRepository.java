@@ -169,7 +169,7 @@ public class ArticleRepository {
      * @return ユーザーの記事一覧
      */
     public List<Article> userArticleFindAll(Integer userId) {
-        String sql = "SELECT articles.id as a_id,articles.title as a_title,articles.content as a_content,articles.created_at as a_created_at,articles.updated_at as a_updated_at FROM articles LEFT OUTER JOIN users ON users.id = articles.user_id WHERE user_id = :userId ORDER BY a_created_at DESC,a_id DESC;";
+        String sql = "SELECT articles.id as a_id,articles.title as a_title,articles.content as a_content,articles.created_at as a_created_at,articles.updated_at as a_updated_at FROM articles WHERE user_id = :userId ORDER BY a_created_at DESC,a_id DESC;";
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
         List<Article> articleList = jdbcTemplate.query(sql, param, USER_ARTICLE_ROWMAPPER);
         return articleList;
