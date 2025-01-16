@@ -70,12 +70,12 @@ public class CommentRepository {
      * 
      * @param comment コメント情報
      */
-    public void update(CommentForm comment, Integer id) {
-        String sql = "UPDATE comments SET content=:content,updated_at=:updatedAt WHERE id=:id";
+    public void update(CommentForm comment, Integer commentId) {
+        String sql = "UPDATE comments SET content=:content, updated_at=:updatedAt WHERE id=:id";
         LocalDateTime now = LocalDateTime.now();
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("content", comment.getContent())
-                .addValue("id", comment.getCommentId())
+                .addValue("id", commentId)
                 .addValue("updatedAt", now);
         jdbcTemplate.update(sql, param);
     }
