@@ -48,5 +48,4 @@ public class UserController {
         List<Article> articleList = articleService.userArticleFindAll(userId);
         return articleList;
     }
-
 }

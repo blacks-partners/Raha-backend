@@ -45,5 +45,4 @@ public class UserRepository {
         return template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
 
     }
-
 }

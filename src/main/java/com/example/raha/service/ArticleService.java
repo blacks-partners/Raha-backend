@@ -51,7 +51,6 @@ public class ArticleService {
      * @return articleId 自動採番されたid
      */
     public Integer insert(ArticleForm article) {
-
         Integer articleId = articleRepository.insert(article);
 
         return articleId;
@@ -65,6 +64,24 @@ public class ArticleService {
     public List<Article> userArticleFindAll(Integer userId) {
         List<Article> articleList = articleRepository.userArticleFindAll(userId);
         return articleList;
+    }
+    /* 記事内容の更新
+     * 
+     * @param article   更新する気情報
+     * @param articleId 対象の記事ID
+     */
+    public void update(ArticleForm article, Integer articleId) {
+        articleRepository.update(article, articleId);
+
+    }
+
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId 記事ID
+     */
+    public void delete(Integer articleId) {
+        articleRepository.delete(articleId);
     }
 
 }
