@@ -57,4 +57,14 @@ public class ArticleService {
         return articleId;
     }
 
+    /**
+     * ユーザーの記事一覧を検索する。
+     * @param userId
+     * @return　ユーザーの記事一覧。
+     */
+    public List<Article> userArticleFindAll(Integer userId) {
+        List<Article> articleList = articleRepository.userArticleFindAll(userId);
+        return articleList;
+    }
+
 }
