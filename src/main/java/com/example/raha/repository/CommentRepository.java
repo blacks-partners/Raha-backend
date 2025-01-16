@@ -53,6 +53,17 @@ public class CommentRepository {
                 .addValue("content", comment.getContent())
                 .addValue("id", commentId)
                 .addValue("updatedAt", now);
+                jdbcTemplate.update(sql, param);
+    }
+
+    /**
+     * コメント情報削除
+     * 
+     * @param commentId コメントID
+     */
+    public void delete(Integer commentId) {
+        String sql = "DELETE FROM comments WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", commentId);
         jdbcTemplate.update(sql, param);
     }
 }

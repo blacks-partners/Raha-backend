@@ -9,6 +9,7 @@ import com.example.raha.service.CommentService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,5 +51,15 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
         commentService.update(comment, commentId);
+    }
+    /**
+     * コメントの削除
+     * 
+     * @param commentId
+     */
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@PathVariable Integer commentId) {
+        commentService.delete(commentId);
     }
 }

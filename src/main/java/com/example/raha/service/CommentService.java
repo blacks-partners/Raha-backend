@@ -39,4 +39,13 @@ public class CommentService {
     public void update(CommentForm comment, Integer commentId) {
         commentRepository.update(comment, commentId);
     }
+    
+    /**
+     * コメント情報削除
+     * 
+     * @param commentId コメントID
+     */
+    public void delete(Integer commentId) {
+        commentRepository.delete(commentId);
+    }
 }
