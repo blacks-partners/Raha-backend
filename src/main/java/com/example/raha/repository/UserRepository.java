@@ -2,6 +2,7 @@ package com.example.raha.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -14,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * ユーザーのRepositoryクラス。
- * 
+ *
  * @author nakaryunosuke
  */
 
@@ -37,7 +38,7 @@ public class UserRepository {
 
     /**
      * ユーザー情報の取得。
-     * 
+     *
      * @param id
      * @return User
      */
@@ -50,7 +51,7 @@ public class UserRepository {
 
     /**
      * ユーザー登録処理。
-     * 
+     *
      * @param user
      * @return ユーザーID
      */
@@ -69,7 +70,7 @@ public class UserRepository {
 
     /**
      * メールアドレスが存在するかの確認。
-     * 
+     *
      * @param email
      * @return Userかnull。
      */
