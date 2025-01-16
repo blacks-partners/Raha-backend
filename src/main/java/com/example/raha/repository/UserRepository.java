@@ -1,6 +1,7 @@
 package com.example.raha.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,11 +16,10 @@ import com.example.raha.form.RegisterUserForm;
 import lombok.RequiredArgsConstructor;
 
 /**
- * ユーザーのRepositoryクラス。
- *
- * @author nakaryunosuke
+ * ユーザーに関するリポジトリクラス
+ * 
+ * @author 金丸天
  */
-
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -38,10 +38,9 @@ public class UserRepository {
     };
 
     /**
-     * ユーザー情報の取得。
-     *
-     * @param id
-     * @return User
+     * ユーザー情報詳細の取得
+     * 
+     * @return user ユーザー情報
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";

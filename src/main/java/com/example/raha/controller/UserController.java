@@ -10,10 +10,10 @@ import com.example.raha.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Userのコントローラー
- * @author nakaryunosuke
+ * ユーザーに関するコントローラークラス
+ * 
+ * @author 金丸天
  */
-
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor

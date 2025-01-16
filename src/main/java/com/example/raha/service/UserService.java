@@ -11,10 +11,10 @@ import com.example.raha.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
- * ユーザーのServiceクラス。
- * @author nakaryunosuke
+ * ユーザーに関するサービスクラス
+ * 
+ * @author 金丸天
  */
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,9 +26,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * User情報を取り出す。
-     * @param id
-     * @return User
+     * ユーザー情報詳細の取得
+     * 
+     * @return user ユーザー情報
      */
     public User load(Integer id) {
         User user = repository.load(id);
