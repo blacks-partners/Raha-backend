@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 
@@ -40,6 +41,17 @@ public class CommentController {
         commentService.insert(comment);
     }
 
+    /**
+     * コメントの更新
+     * 
+     * @param comment コメント情報
+     * @param commentId 更新するコメントID
+     */
+    @PutMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
+        commentService.update(comment, commentId);
+    }
     /**
      * コメントの削除
      * 
