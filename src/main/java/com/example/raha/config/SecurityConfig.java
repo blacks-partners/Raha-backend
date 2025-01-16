@@ -36,6 +36,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                // *の数で変わるかも
                 .anyRequest().authenticated());
 
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter.class)

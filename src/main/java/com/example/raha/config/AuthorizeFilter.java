@@ -41,7 +41,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
                     .verify(xAuthToken.substring(7));
-            String username = decodedJWT.getClaim("username").toString();
+            String username = decodedJWT.getClaim("userId").toString();
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>()));
         }
         filterChain.doFilter(request, response);

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.raha.domain.User;
 import com.example.raha.form.LoginForm;
+import com.example.raha.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class AccountController {
+    private final UserService service;
     private final DaoAuthenticationProvider provider;
 
     @Value("${jwt.secret}")
@@ -44,7 +47,8 @@ public class AccountController {
 
         try {
             provider.authenticate(new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword()));
-            String token = JWT.create().withClaim("username", form.getEmail())
+            User user = service.loadByEmail(form.getEmail());
+            String token = JWT.create().withClaim("userId", user.getUserId())
                     .withExpiresAt(OffsetDateTime.now().plusMinutes(60).toInstant()).sign(Algorithm.HMAC256(secret));
             HttpHeaders headers = new HttpHeaders();
             headers.add("X-AUTH-TOKEN", "Bearer " + token);
