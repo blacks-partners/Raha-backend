@@ -15,7 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.example.raha.service.UserService;
+import com.example.raha.service.LoginUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,7 +54,7 @@ public class SecurityConfig {
 
     // ユーザー情報の取得とパスワードの照合を行う
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
+    public DaoAuthenticationProvider daoAuthenticationProvider(LoginUserDetailsService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         // ユーザー詳細サービスを設定（ユーザー情報の取得に使用）
         provider.setUserDetailsService(userService);
