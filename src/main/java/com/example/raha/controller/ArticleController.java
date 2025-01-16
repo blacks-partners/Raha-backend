@@ -71,7 +71,7 @@ public class ArticleController {
     /**
      * 該当の記事削除
      * 
-     * @param articleId
+     * @param articleId 記事ID
      */
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

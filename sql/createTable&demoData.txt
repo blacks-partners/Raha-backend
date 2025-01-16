@@ -25,7 +25,7 @@ CREATE TABLE articles (
     user_id integer NOT NULL, -- user_idをカラムとして定義し、NOT NULLを設定
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- コメントテーブル作成
@@ -38,8 +38,8 @@ article_id integer NOT NULL,
 content varchar(500) NOT NULL,
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
-CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id)
+CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 
 

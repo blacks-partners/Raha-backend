@@ -62,7 +62,7 @@ public class ArticleService {
     /**
      * 該当の記事削除
      * 
-     * @param articleId
+     * @param articleId 記事ID
      */
     public void delete(Integer articleId) {
         articleRepository.delete(articleId);

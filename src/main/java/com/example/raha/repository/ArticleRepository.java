@@ -154,7 +154,7 @@ public class ArticleRepository {
     /**
      * 該当の記事削除
      * 
-     * @param articleId
+     * @param articleId 記事ID
      */
     public void delete(Integer articleId) {
         String sql = "DELETE FROM articles WHERE id=:id";
