@@ -31,4 +31,12 @@ public class GlobalExceptionHandler {
         response.put("message", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
+
+    // ログイン認証失敗エラー処理
+    @ExceptionHandler(invalidAuthenticationException.class)
+    public ResponseEntity<Map<String, String>> authenticationException(invalidAuthenticationException e) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
 }

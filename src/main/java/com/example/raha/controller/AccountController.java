@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.raha.domain.User;
+import com.example.raha.error.invalidAuthenticationException;
 import com.example.raha.form.LoginForm;
 import com.example.raha.service.UserService;
 
@@ -52,14 +53,13 @@ public class AccountController {
 
             // userIdクレーム、60分の有効期限を持つJWTトークンの生成
             String token = JWT.create().withClaim("userId", user.getUserId())
-                    .withExpiresAt(OffsetDateTime.now().plusMinutes(60).toInstant()).sign(Algorithm.HMAC256(secret));
+                    .withExpiresAt(OffsetDateTime.now().plusDays(1).toInstant()).sign(Algorithm.HMAC256(secret));
             HttpHeaders headers = new HttpHeaders();
             headers.add("X-AUTH-TOKEN", "Bearer " + token);
             return new ResponseEntity<>(headers, HttpStatus.OK);
 
         } catch (AuthenticationException e) {
-            Map<String, String> response = Map.of("message", "メールアドレス又はパスワードが誤っています");
-            return new ResponseEntity<Map<String, String>>(response, HttpStatus.UNAUTHORIZED);
+            throw new invalidAuthenticationException("メールアドレス又はパスワードが誤っています");
         }
     }
 }
