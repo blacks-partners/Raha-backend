@@ -1,11 +1,39 @@
 package com.example.raha.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import com.example.raha.form.CommentForm;
+import com.example.raha.service.CommentService;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.HttpStatus;
+
+
+/**
+ * コメントに関するコントローラークラス
+ * 
+ * @author K.Kawachino
+ */
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
 
+    private final CommentService commentService;
+
+    /**
+     * コメントの登録
+     * 
+     * @param comment
+     */
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void insertComment(@RequestBody CommentForm comment) {
+
+        commentService.insert(comment);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -65,6 +66,19 @@ public class ArticleController {
     public void insert(@RequestBody ArticleForm article) {
 
         articleService.insert(article);
+    }
+
+    /**
+     * 記事内容の更新
+     * 
+     * @param article   更新する気情報
+     * @param articleId 対象の記事ID
+     */
+    @PutMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
+        articleService.update(article, articleId);
+
     }
 
 }
