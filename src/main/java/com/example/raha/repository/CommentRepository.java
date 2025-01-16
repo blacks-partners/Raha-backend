@@ -1,7 +1,11 @@
 package com.example.raha.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -47,5 +51,32 @@ public class CommentRepository {
         jdbcTemplate.update(sql, param, keyHolder, keyColumnName);
         Integer id = (keyHolder.getKey().intValue());
         return id;
+    }
+
+    /**
+     * コメント情報取得
+     * 
+     * @param id 記事ID
+     * @return comment コメント情報
+     */
+    public List<Comment> load(Integer id) {
+        String sql = "SELECT id, content, created_at, updated_at FROM comments WHERE id=:id";
+        SqlParameterSource param = new BeanPropertySqlParameterSource(id);
+        return jdbcTemplate.query(sql, param, COMMENT_ROWMAPPER);
+    }
+
+    /**
+     * コメント情報更新
+     * 
+     * @param comment コメント情報
+     */
+    public void update(CommentForm comment, Integer id) {
+        String sql = "UPDATE comments SET content=:content,updated_at=:updatedAt WHERE id=:id";
+        LocalDateTime now = LocalDateTime.now();
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("content", comment.getContent())
+                .addValue("id", comment.getCommentId())
+                .addValue("updatedAt", now);
+        jdbcTemplate.update(sql, param);
     }
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class CommentForm {
 
+    private Integer commentId;
     private String content;
     private Integer userId;
     private Integer articleId;
