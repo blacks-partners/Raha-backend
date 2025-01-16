@@ -4,35 +4,39 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * ユーザーサービス
+ * @author hosodatomoya
+ */
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository repository;
 
+    /**
+     * ユーザー情報を取得
+     * @param id ID
+     * @return ユーザー情報
+     */
     public User load(Integer id) {
         return repository.load(id);
 
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.loadByEmail(email);
-        if (user == null) {
-            return null;
-        }
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .build();
-    }
-
+    /**
+     * メールアドレスからユーザー情報を取得
+     * @param email メールアドレス
+     * @return ユーザー情報
+     */
     public User loadByEmail(String email) {
         return repository.loadByEmail(email);
     }

@@ -3,12 +3,20 @@ package com.example.raha.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * SecurityConfigクラスで使用するユーザーサービス
+ * @author hosodatomoya
+ */
+@Service
+@Transactional
 @RequiredArgsConstructor
 public class LoginUserDetailsService implements UserDetailsService {
     private final UserRepository repository;
