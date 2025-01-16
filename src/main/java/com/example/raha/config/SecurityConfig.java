@@ -28,19 +28,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        // CSRF（クロスサイトリクエストフォージェリ）保護を無効化
         http.csrf(csrf -> csrf.disable());
 
-        // CORSの設定
+        // CORS（クロスオリジンリソースシェアリング）の設定を適用
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
-                // *の数で変わるかも
                 .anyRequest().authenticated());
 
+        // カスタムの認可フィルタをセキュリティフィルタチェーンに追加
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter.class)
+                // セッション管理をステートレスに設定（セッションを使用しない）
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 
@@ -49,15 +52,18 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // ユーザー情報の取得、パスワードの照合を行う
+    // ユーザー情報の取得とパスワードの照合を行う
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        // ユーザー詳細サービスを設定（ユーザー情報の取得に使用）
         provider.setUserDetailsService(userService);
+        // パスワードエンコーダーを設定（パスワードの照合に使用）
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
+    // CORSの設定を定義
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
@@ -65,7 +71,9 @@ public class SecurityConfig {
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
         corsConfiguration.addExposedHeader("X-AUTH-TOKEN");
         corsConfiguration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // 全てのパスに対してCORS設定を適用
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }

@@ -46,8 +46,11 @@ public class AccountController {
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginForm form) {
 
         try {
+            // ユーザーの認証
             provider.authenticate(new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword()));
             User user = service.loadByEmail(form.getEmail());
+
+            // userIdクレーム、60分の有効期限を持つJWTトークンの生成
             String token = JWT.create().withClaim("userId", user.getUserId())
                     .withExpiresAt(OffsetDateTime.now().plusMinutes(60).toInstant()).sign(Algorithm.HMAC256(secret));
             HttpHeaders headers = new HttpHeaders();

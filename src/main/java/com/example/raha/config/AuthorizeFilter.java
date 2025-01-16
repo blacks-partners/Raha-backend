@@ -32,18 +32,29 @@ public class AuthorizeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         if (!matcher.matches(request)) {
+            // リクエストヘッダーから "X-AUTH-TOKEN" を取得
             String xAuthToken = request.getHeader("X-AUTH-TOKEN");
+
+            // トークンが存在しないか、"Bearer " で始まらない場合はフィルタをスキップ
             if (xAuthToken == null || !xAuthToken.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
+                filterChain.doFilter(request, response); // 次のフィルタまたはリソースに処理を渡す
                 return;
             }
-            
+
+            // トークンの "Bearer " 部分を取り除き、実際のトークンを取得
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
                     .verify(xAuthToken.substring(7));
+
+            // デコードされたJWTから "userId" クレームを取得し、ユーザー名として使用
             String username = decodedJWT.getClaim("userId").toString();
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>()));
+
+            // 認証情報を作成し、セキュリティコンテキストに設定
+            SecurityContextHolder.getContext()
+                    .setAuthentication(new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>()));
         }
         filterChain.doFilter(request, response);
     }
+
 }
