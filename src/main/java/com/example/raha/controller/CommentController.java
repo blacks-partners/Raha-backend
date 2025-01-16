@@ -10,6 +10,7 @@ import com.example.raha.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class CommentController {
      */
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(Integer commentId) {
+    public void deleteComment(@PathVariable Integer commentId) {
         commentService.delete(commentId);
     }
 }
