@@ -49,13 +49,13 @@ public class ArticleRepository {
 
     private static final RowMapper<Article> USER_ARTICLE_ROWMAPPER = (rs, i) -> {
         Article article = new Article();
-        article.setArticleId(rs.getInt("id"));
-        article.setTitle(rs.getString("title"));
-        article.setContent(rs.getString("content"));
+        article.setArticleId(rs.getInt("a_id"));
+        article.setTitle(rs.getString("a_title"));
+        article.setContent(rs.getString("a_content"));
         article.setUser(null);
         article.setCommentList(null);
-        article.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        article.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        article.setCreatedAt(rs.getTimestamp("a_created_at").toLocalDateTime());
+        article.setUpdatedAt(rs.getTimestamp("a_updated_at").toLocalDateTime());
         return article;
     };
 
@@ -116,7 +116,7 @@ public class ArticleRepository {
 
         String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_content,a.created_at as a_created_at,a.updated_at as a_updated_at,u.id as u_id, u.name as u_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id ORDER BY a.created_at DESC,a.id DESC";
 
-        List<Article> articleList = jdbcTemplate.query(sql, ARTICLE_ROWMAPPER);
+        List<Article> articleList = jdbcTemplate.query(sql, USER_ARTICLE_ROWMAPPER);
 
         return articleList;
     }
@@ -169,10 +169,9 @@ public class ArticleRepository {
      * @return ユーザーの記事一覧
      */
     public List<Article> userArticleFindAll(Integer userId) {
-        // String sql = "SELECT id,title,content,created_at,updated_at FROM articles WHERE user_id = :userId ORDER BY created_at DESC,id DESC";
-        String sql = "SELECT articles.id,articles.title,articles.content,articles.created_at,articles.updated_at FROM articles LEFT OUTER JOIN users ON users.id = articles.user_id WHERE user_id = :userId ORDER BY articles.created_at DESC,articles.id DESC;";
+        String sql = "SELECT articles.id as a_id,articles.title as a_title,articles.content as a_content,articles.created_at as a_created_at,articles.updated_at as a_updated_at FROM articles LEFT OUTER JOIN users ON users.id = articles.user_id WHERE user_id = :userId ORDER BY a_created_at DESC,a_id DESC;";
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
-        List<Article> articleList = jdbcTemplate.query(sql, param, ARTICLE_ROWMAPPER);
+        List<Article> articleList = jdbcTemplate.query(sql, param, USER_ARTICLE_ROWMAPPER);
         return articleList;
     }
 }
