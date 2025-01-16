@@ -2,6 +2,8 @@ package com.example.raha.service;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.raha.domain.Article;
@@ -55,6 +57,16 @@ public class ArticleService {
         Integer articleId = articleRepository.insert(article);
 
         return articleId;
+    }
+
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId
+     */
+    public void delete(Integer articleId) {
+        articleRepository.delete(articleId);
+
     }
 
 }

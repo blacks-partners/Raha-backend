@@ -151,4 +151,18 @@ public class ArticleRepository {
         return articleId;
     }
 
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId
+     */
+    public void delete(Integer articleId) {
+        String sql = "DELETE FROM articles WHERE id=:id";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId);
+
+        jdbcTemplate.update(sql, param);
+
+    }
+
 }
