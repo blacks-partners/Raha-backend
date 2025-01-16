@@ -39,11 +39,11 @@ public class AccountController {
         if(registeredUser != null){
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
-        Integer id = service.register(form);
+        Integer userId = service.register(form);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
-                .buildAndExpand(id)
+                .buildAndExpand(userId)
                 .toUri();
 
         return ResponseEntity.created(location).build();
