@@ -10,7 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import com.example.raha.domain.User;
-import com.example.raha.form.UserForm;
+import com.example.raha.form.RegisterUserForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +57,7 @@ public class UserRepository {
      * @return ユーザーID
      */
     @SuppressWarnings("null")
-    public Integer insert(UserForm form) {
+    public Integer insert(RegisterUserForm form) {
         String sql = "INSERT INTO users(name,email,password) VALUES(:name, :email, :password);";
         SqlParameterSource param = new BeanPropertySqlParameterSource(form);
 

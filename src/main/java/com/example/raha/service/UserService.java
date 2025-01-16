@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.raha.domain.User;
-import com.example.raha.form.UserForm;
+import com.example.raha.form.RegisterUserForm;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class UserService {
      * @param user
      * @return ユーザーIDを返す。
      */
-    public Integer register(UserForm form){
+    public Integer register(RegisterUserForm form){
         form.setPassword(passwordEncoder.encode(form.getPassword()));
         Integer id = repository.insert(form);
         return id;
