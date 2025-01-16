@@ -1,5 +1,6 @@
 package com.example.raha.repository;
 
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,6 +11,11 @@ import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * ユーザーに関するリポジトリクラス
+ * 
+ * @author 金丸天
+ */
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -27,6 +33,11 @@ public class UserRepository {
         return user;
     };
 
+    /**
+     * ユーザー情報詳細の取得
+     * 
+     * @return user ユーザー情報
+     */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,update_at FROM users WHERE id=:id";
 
