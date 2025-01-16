@@ -36,14 +36,16 @@ public class CommentRepository {
     /**
      * コメント情報追加
      * 
-     * @param comment
+     * @param comment コメント情報
+     * @return id コメントID（単体テストで用いるため）
      */
-    public void insert(CommentForm comment) {
+    public Integer insert(CommentForm comment) {
         String sql = "INSERT INTO comments (content, user_id, article_id) VALUES (:content, :userId, :articleId)";
         SqlParameterSource param = new BeanPropertySqlParameterSource(comment);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
         jdbcTemplate.update(sql, param, keyHolder, keyColumnName);
         Integer id = (keyHolder.getKey().intValue());
+        return id;
     }
 }

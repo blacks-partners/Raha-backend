@@ -23,10 +23,10 @@ public class CommentService {
     /**
      * コメント情報追加
      * 
-     * @param comment
-     * @return
+     * @param comment コメント情報
+     * @return id コメントID（単体テストで用いるため）
      */
-    public void insert(CommentForm comment) {
-        commentRepository.insert(comment);
+    public Integer insert(CommentForm comment) {
+        return commentRepository.insert(comment);
     }
 }

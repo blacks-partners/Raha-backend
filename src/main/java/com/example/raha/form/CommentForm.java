@@ -1,12 +1,13 @@
 package com.example.raha.form;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+/**
+ * コメント情報フォーム
+ * 
+ * @author K.Kawachino
+ */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CommentForm {
 
     private String content;
