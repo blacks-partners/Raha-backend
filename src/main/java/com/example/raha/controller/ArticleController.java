@@ -1,8 +1,10 @@
 package com.example.raha.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.raha.domain.Article;
 import com.example.raha.form.ArticleForm;
@@ -63,9 +66,18 @@ public class ArticleController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insert(@RequestBody ArticleForm article) {
+    public ResponseEntity<Void> insert(@RequestBody ArticleForm article) {
 
-        articleService.insert(article);
+        Integer articleId = articleService.insert(article);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(articleId)
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+
     }
 
     /**

@@ -53,7 +53,6 @@ public class ArticleService {
      * @return articleId 自動採番されたid
      */
     public Integer insert(ArticleForm article) {
-
         Integer articleId = articleRepository.insert(article);
 
         return articleId;
