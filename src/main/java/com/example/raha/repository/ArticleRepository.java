@@ -165,6 +165,7 @@ public class ArticleRepository {
 
     /**
      * ユーザーの投稿一覧を取得する。
+     * 
      * @param userId
      * @return ユーザーの記事一覧
      */

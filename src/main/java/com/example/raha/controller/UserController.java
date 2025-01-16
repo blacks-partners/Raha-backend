@@ -40,6 +40,7 @@ public class UserController {
 
     /**
      * ユーザーの記事一覧を取得。
+     * 
      * @param userId
      * @return ユーザーの記事一覧。
      */

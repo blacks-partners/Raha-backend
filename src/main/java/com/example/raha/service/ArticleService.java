@@ -58,6 +58,7 @@ public class ArticleService {
 
     /**
      * ユーザーの記事一覧を検索する。
+     * 
      * @param userId
      * @return　ユーザーの記事一覧。
      */
