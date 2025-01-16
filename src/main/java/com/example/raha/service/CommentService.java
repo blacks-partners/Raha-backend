@@ -29,4 +29,23 @@ public class CommentService {
     public Integer insert(CommentForm comment) {
         return commentRepository.insert(comment);
     }
+
+    /**
+     * コメント情報更新
+     * 
+     * @param comment コメント情報
+     * @param commentId 更新するコメントID
+     */
+    public void update(CommentForm comment, Integer commentId) {
+        commentRepository.update(comment, commentId);
+    }
+    
+    /**
+     * コメント情報削除
+     * 
+     * @param commentId コメントID
+     */
+    public void delete(Integer commentId) {
+        commentRepository.delete(commentId);
+    }
 }
