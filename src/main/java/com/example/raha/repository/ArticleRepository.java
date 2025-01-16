@@ -1,5 +1,6 @@
 package com.example.raha.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,11 +160,13 @@ public class ArticleRepository {
      * @param articleId 対象の記事ID
      */
     public void update(ArticleForm article, Integer articleId) {
-        String sql = "UPDATE articles SET title=:title,content=:content WHERE id=:id";
+        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id";
+
+        LocalDateTime now = LocalDateTime.now();
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
                 .addValue("content", article.getContent())
-                .addValue("id", articleId);
+                .addValue("id", articleId).addValue("updatedAt", now);
         jdbcTemplate.update(sql, param);
 
     }
