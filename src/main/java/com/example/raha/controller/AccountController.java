@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.raha.domain.User;
+import com.example.raha.error.ConflictException;
 import com.example.raha.form.UserForm;
 import com.example.raha.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class AccountController {
     public Integer register(@RequestBody UserForm form){
         User registeredUser = service.findByEmail(form.getEmail());
         if(registeredUser != null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "入力されたメールアドレスは既に登録されています");
+            throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
         Integer id = service.register(form);
         return id;
