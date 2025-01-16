@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +91,18 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
         articleService.update(article, articleId);
+
+    }
+
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId 記事ID
+     */
+    @DeleteMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer articleId) {
+        articleService.delete(articleId);
 
     }
 

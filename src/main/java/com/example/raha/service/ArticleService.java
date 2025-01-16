@@ -1,5 +1,6 @@
 package com.example.raha.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -66,6 +67,16 @@ public class ArticleService {
      */
     public void update(ArticleForm article, Integer articleId) {
         articleRepository.update(article, articleId);
+
+    }
+
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId 記事ID
+     */
+    public void delete(Integer articleId) {
+        articleRepository.delete(articleId);
 
     }
 

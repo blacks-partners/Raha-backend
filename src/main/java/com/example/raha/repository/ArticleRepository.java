@@ -167,6 +167,21 @@ public class ArticleRepository {
         SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
                 .addValue("content", article.getContent())
                 .addValue("id", articleId).addValue("updatedAt", now);
+
+        jdbcTemplate.update(sql, param);
+
+    }
+
+    /**
+     * 該当の記事削除
+     * 
+     * @param articleId 記事ID
+     */
+    public void delete(Integer articleId) {
+        String sql = "DELETE FROM articles WHERE id=:id";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId);
+
         jdbcTemplate.update(sql, param);
 
     }
