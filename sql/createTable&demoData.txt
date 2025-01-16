@@ -10,7 +10,7 @@ email varchar(50) NOT NULL UNIQUE,
 password varchar(100) NOT NULL,
 introduction varchar(150),
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -24,7 +24,7 @@ CREATE TABLE articles (
     content varchar(10000) NOT NULL,
     user_id integer NOT NULL, -- user_idをカラムとして定義し、NOT NULLを設定
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -37,7 +37,7 @@ user_id integer NOT NULL,
 article_id integer NOT NULL,
 content varchar(500) NOT NULL,
 created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-update_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
 CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
