@@ -201,10 +201,10 @@ public class ArticleRepository {
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId) {
-        String sql = "DELETE FROM articles WHERE id=:id";
+    public void delete(Integer articleId, Integer userId) {
+        String sql = "DELETE FROM articles WHERE id=:id AND user_id=:userId";
 
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId).addValue("userId", userId);
 
         jdbcTemplate.update(sql, param);
 
