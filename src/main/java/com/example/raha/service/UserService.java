@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するサービスクラス
  * 
- * @author 金丸天
+ * @author T.Kanamaru
  */
 @Service
 @Transactional
@@ -40,8 +40,8 @@ public class UserService {
     /**
      * ユーザー登録をする。
      * 
-     * @param user
-     * @return ユーザーIDを返す。
+     * @param user ユーザー
+     * @return id ユーザーID
      */
     public Integer register(RegisterUserForm form){
         form.setPassword(passwordEncoder.encode(form.getPassword()));
@@ -52,8 +52,8 @@ public class UserService {
     /**
      * メールアドレスを持っているユーザーを探す。
      * 
-     * @param email
-     * @return user
+     * @param email メールアドレス
+     * @return user ユーザー
      */
     public User findByEmail(String email){
         if(email == null){
@@ -66,8 +66,8 @@ public class UserService {
     /**
      * ユーザー情報の更新。
      * 
-     * @param userId
-     * @param form
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容(名前、メールアドレス、自己紹介)
      */
     public void update(Integer userId, UpdateUserForm form) {
         repository.update(userId, form);

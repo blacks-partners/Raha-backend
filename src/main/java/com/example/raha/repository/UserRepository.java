@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するリポジトリクラス
  * 
- * @author 金丸天
+ * @author T.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -43,8 +43,8 @@ public class UserRepository {
     /**
      * ユーザー情報詳細の取得
      * 
-     * @param id
-     * @return User
+     * @param id ユーザーID
+     * @return User ユーザー
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
@@ -56,8 +56,8 @@ public class UserRepository {
     /**
      * ユーザー登録処理。
      *
-     * @param user
-     * @return ユーザーID
+     * @param user ユーザー
+     * @return id ユーザーID
      */
     @SuppressWarnings("null")
     public Integer insert(RegisterUserForm form) {
@@ -74,8 +74,8 @@ public class UserRepository {
     /**
      * メールアドレスが存在するかの確認。
      *
-     * @param email
-     * @return Userかnull。
+     * @param email メールアドレス
+     * @return Userかnull ユーザーかnullを返す。
      */
     public User findByEmail(String email) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
@@ -91,8 +91,8 @@ public class UserRepository {
     /**
      * ユーザー情報の更新。
      * 
-     * @param userId
-     * @param form
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容(名前、メールアドレス、自己紹介)
      */
     public void update(Integer userId, UpdateUserForm form) {
         String sql = "UPDATE users SET name = :name, email = :email, introduction = :introduction, updated_at = :updated_at WHERE id = :userId;";

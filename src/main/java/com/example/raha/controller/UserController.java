@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するコントローラークラス
  * 
- * @author 金丸天
+ * @author T.Kanamru
  */
 @RestController
 @RequestMapping("/users")
@@ -29,8 +29,8 @@ public class UserController {
     /**
      * User情報を取得する。
      * 
-     * @param userId
-     * @return user
+     * @param userId ユーザーID
+     * @return user ユーザー
      */
     @GetMapping("/{userId}")
     public User userDetails(@PathVariable Integer userId) {
@@ -41,8 +41,8 @@ public class UserController {
     /**
      * ユーザー情報の更新。
      * 
-     * @param userId
-     * @param form
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容(名前、メールアドレス、自己紹介)
      */
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
