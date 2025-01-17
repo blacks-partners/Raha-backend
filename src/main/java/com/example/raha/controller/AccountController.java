@@ -35,7 +35,6 @@ public class AccountController {
     private final UserService service;
     private final DaoAuthenticationProvider provider;
 
-
     /**
      * ログイン
      * 
@@ -62,23 +61,23 @@ public class AccountController {
 
     /**
      * ユーザー登録をする。
+     * 
      * @param RegisterUserForm
      * @return ユーザーIDを返す。
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> register(@RequestBody RegisterUserForm form){
+    public ResponseEntity<Map<String, Integer>> register(@RequestBody RegisterUserForm form) {
         User registeredUser = service.findByEmail(form.getEmail());
-        if(registeredUser != null){
+        if (registeredUser != null) {
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
         Integer userId = service.register(form);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(userId)
-                .toUri();
 
-        return ResponseEntity.created(location).build();
+        // JWTトークンの生成
+        HttpHeaders headers = service.createJwtHeader(userId);
+        Map<String, Integer> response = Map.of("userId", userId);
+
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 }
