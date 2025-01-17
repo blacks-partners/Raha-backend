@@ -44,7 +44,7 @@ public class AccountController {
      * @return レスポンス
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginForm form) {
+    public ResponseEntity<Map<String, Integer>> login(@RequestBody LoginForm form) {
 
         try {
             // ユーザーの認証
@@ -56,7 +56,8 @@ public class AccountController {
                     .withExpiresAt(OffsetDateTime.now().plusDays(1).toInstant()).sign(Algorithm.HMAC256(secret));
             HttpHeaders headers = new HttpHeaders();
             headers.add("X-AUTH-TOKEN", "Bearer " + token);
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            Map<String, Integer> response = Map.of("userId", user.getUserId());
+            return new ResponseEntity<>(response, headers, HttpStatus.OK);
 
         } catch (AuthenticationException e) {
             throw new invalidAuthenticationException("メールアドレス又はパスワードが誤っています");
