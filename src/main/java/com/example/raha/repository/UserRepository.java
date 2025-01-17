@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
 
@@ -83,6 +84,17 @@ public class UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    /**
+     * ユーザーの削除
+     * 
+     * @param userId
+     */
+    public void delete(Integer userId) {
+        String sql = "DELETE FROM users WHERE id = :userId;";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+        template.update(sql, param);
     }
 
 }
