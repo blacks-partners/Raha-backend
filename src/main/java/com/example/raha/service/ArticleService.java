@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 記事に関するサービスクラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Service
 @Transactional
@@ -60,15 +60,18 @@ public class ArticleService {
      * ユーザーの記事一覧を検索する。
      * 
      * @param userId
-     * @return　ユーザーの記事一覧。
+     * @return ユーザーの記事一覧。
      */
     public List<Article> userArticleFindAll(Integer userId) {
         List<Article> articleList = articleRepository.userArticleFindAll(userId);
         return articleList;
     }
-    /* 記事内容の更新
+
+    /*
+     * 記事内容の更新
      * 
-     * @param article   更新する気情報
+     * @param article 更新する気情報
+     * 
      * @param articleId 対象の記事ID
      */
     public void update(ArticleForm article, Integer articleId) {

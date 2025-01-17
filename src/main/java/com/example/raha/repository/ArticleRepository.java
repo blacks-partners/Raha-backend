@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するリポジトリークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -175,10 +175,12 @@ public class ArticleRepository {
         List<Article> articleList = jdbcTemplate.query(sql, param, USER_ARTICLE_ROWMAPPER);
         return articleList;
     }
-    
-    /* 記事内容の更新
+
+    /*
+     * 記事内容の更新
      * 
-     * @param article   更新する気情報
+     * @param article 更新する気情報
+     * 
      * @param articleId 対象の記事ID
      */
     public void update(ArticleForm article, Integer articleId) {

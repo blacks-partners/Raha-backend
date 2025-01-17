@@ -1,7 +1,9 @@
 package com.example.raha.controller;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 記事に関するコントローラークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @RestController
 @RequiredArgsConstructor
@@ -67,9 +69,12 @@ public class ArticleController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> insert(@RequestBody ArticleForm article) {
+    public ResponseEntity<Map<String, Integer>> insert(@RequestBody ArticleForm article) {
 
         Integer articleId = articleService.insert(article);
+
+        Map<String, Integer> articleIdPassMap = new HashMap<>();
+        articleIdPassMap.put("articleId", articleId);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -77,7 +82,7 @@ public class ArticleController {
                 .buildAndExpand(articleId)
                 .toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(articleIdPassMap);
 
     }
 

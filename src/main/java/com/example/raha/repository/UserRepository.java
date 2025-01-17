@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するリポジトリクラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
