@@ -6,15 +6,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * ユーザーのServiceクラス。
- * @author nakaryunosuke
+ * ユーザーに関するサービスクラス
+ * 
+ * @author T.Kanamaru
  */
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,20 +27,20 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * User情報を取り出す。
-     * @param id
-     * @return User
+     * ユーザー情報詳細の取得。
+     * @param id ユーザーID
+     * @return user ユーザー
      */
     public User load(Integer id) {
         User user = repository.load(id);
         return user;
-
     }
 
     /**
      * ユーザー登録をする。
-     * @param user
-     * @return ユーザーIDを返す。
+     * 
+     * @param user ユーザー
+     * @return id ユーザーID
      */
     public Integer register(RegisterUserForm form){
         form.setPassword(passwordEncoder.encode(form.getPassword()));
@@ -49,8 +50,9 @@ public class UserService {
 
     /**
      * メールアドレスを持っているユーザーを探す。
-     * @param email
-     * @return user
+     * 
+     * @param email メールアドレス
+     * @return user ユーザー
      */
     public User findByEmail(String email){
         if(email == null){
@@ -58,6 +60,16 @@ public class UserService {
         }
         User user = repository.findByEmail(email);
         return user;
+    }
+
+    /**
+     * ユーザー情報の更新。
+     * 
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容。
+     */
+    public void update(Integer userId, UpdateUserForm form) {
+        repository.update(userId, form);
     }
 
 }
