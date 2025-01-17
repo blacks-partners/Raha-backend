@@ -11,6 +11,11 @@ import com.example.raha.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * ユーザーに関するリポジトリクラス
+ * 
+ * @author 金丸天
+ */
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {

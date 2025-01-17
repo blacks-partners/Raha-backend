@@ -9,8 +9,9 @@ import com.example.raha.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
- * ユーザーサービス
- * @author hosodatomoya
+ * ユーザーに関するサービスクラス
+ * 
+ * @author 金丸天
  */
 @Service
 @Transactional
