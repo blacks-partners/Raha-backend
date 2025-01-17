@@ -27,14 +27,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * ユーザー情報詳細の取得
-     * 
-     * @return user ユーザー情報
+     * ユーザー情報詳細の取得。
+     * @param id ユーザーID
+     * @return user ユーザー
      */
     public User load(Integer id) {
         User user = repository.load(id);
         return user;
-
     }
 
     /**
