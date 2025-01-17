@@ -42,8 +42,8 @@ public class UserRepository {
 
     /**
      * ユーザー情報詳細の取得
-     * 
-     * @return user ユーザー情報
+     * @param id
+     * @return User
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
