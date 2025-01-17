@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.raha.domain.User;
@@ -15,7 +14,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Userのコントローラー
- * @author nakaryunosuke
+ * 
+ * @author R.Naka
  */
 
 @RestController
@@ -27,8 +27,9 @@ public class UserController {
 
     /**
      * User情報を取得する。
-     * @param userId
-     * @return user
+     * 
+     * @param userId ユーザーID
+     * @return user ユーザー
      */
     @GetMapping("/{userId}")
     public User userDetails(@PathVariable Integer userId) {
@@ -39,7 +40,7 @@ public class UserController {
     /**
      * ユーザーの削除。
      * 
-     * @param userId
+     * @param userId ユーザーID
      */
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

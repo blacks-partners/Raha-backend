@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーのRepositoryクラス。
  *
- * @author nakaryunosuke
+ * @author R.Naka
  */
 
 @Repository
@@ -89,7 +89,7 @@ public class UserRepository {
     /**
      * ユーザーの削除
      * 
-     * @param userId
+     * @param userId ユーザーID
      */
     public void delete(Integer userId) {
         String sql = "DELETE FROM users WHERE id = :userId;";

@@ -12,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * ユーザーのServiceクラス。
- * @author nakaryunosuke
+ * 
+ * @author R.Naka
  */
 
 @Service
@@ -38,6 +39,7 @@ public class UserService {
 
     /**
      * ユーザー登録をする。
+     * 
      * @param user
      * @return ユーザーIDを返す。
      */
@@ -49,6 +51,7 @@ public class UserService {
 
     /**
      * メールアドレスを持っているユーザーを探す。
+     * 
      * @param email
      * @return user
      */
@@ -63,7 +66,7 @@ public class UserService {
     /**
      * ユーザーの削除。
      * 
-     * @param userId
+     * @param userId ユーザーID
      */
     public void delete(Integer userId) {
         repository.delete(userId);
