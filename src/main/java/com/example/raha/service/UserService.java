@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class UserService {
 
     /**
      * ユーザー登録をする。
+     * 
      * @param user
      * @return ユーザーIDを返す。
      */
@@ -49,6 +51,7 @@ public class UserService {
 
     /**
      * メールアドレスを持っているユーザーを探す。
+     * 
      * @param email
      * @return user
      */
@@ -58,6 +61,16 @@ public class UserService {
         }
         User user = repository.findByEmail(email);
         return user;
+    }
+
+    /**
+     * ユーザー情報の更新。
+     * 
+     * @param userId
+     * @param form
+     */
+    public void update(Integer userId, UpdateUserForm form) {
+        repository.update(userId, form);
     }
 
 }

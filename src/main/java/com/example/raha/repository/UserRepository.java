@@ -1,7 +1,8 @@
 package com.example.raha.repository;
 
+import java.time.LocalDateTime;
+
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,8 +11,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -82,6 +85,24 @@ public class UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    /**
+     * ユーザー情報の更新。
+     * 
+     * @param userId
+     * @param form
+     */
+    public void update(Integer userId, UpdateUserForm form) {
+        String sql = "UPDATE users SET name = :name, email = :email, introduction = :introduction, updated_at = :updated_at WHERE id = :userId;";
+        LocalDateTime updateTime = LocalDateTime.now();
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("name", form.getName())
+                .addValue("email", form.getEmail())
+                .addValue("introduction", form.getIntroduction())
+                .addValue("updated_at", updateTime)
+                .addValue("userId", userId);
+        template.update(sql, param);
     }
 
 }
