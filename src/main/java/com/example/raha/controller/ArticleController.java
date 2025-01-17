@@ -67,7 +67,7 @@ public class ArticleController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> insert(@RequestBody ArticleForm article) {
+    public ResponseEntity<Integer> insert(@RequestBody ArticleForm article) {
 
         Integer articleId = articleService.insert(article);
 
@@ -77,7 +77,7 @@ public class ArticleController {
                 .buildAndExpand(articleId)
                 .toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(articleId);
 
     }
 
