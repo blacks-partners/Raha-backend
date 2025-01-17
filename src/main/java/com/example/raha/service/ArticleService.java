@@ -57,7 +57,16 @@ public class ArticleService {
     }
 
     /**
-     * 記事内容の更新
+     * ユーザーの記事一覧を検索する。
+     * 
+     * @param userId
+     * @return　ユーザーの記事一覧。
+     */
+    public List<Article> userArticleFindAll(Integer userId) {
+        List<Article> articleList = articleRepository.userArticleFindAll(userId);
+        return articleList;
+    }
+    /* 記事内容の更新
      * 
      * @param article   更新する気情報
      * @param articleId 対象の記事ID
@@ -74,7 +83,6 @@ public class ArticleService {
      */
     public void delete(Integer articleId) {
         articleRepository.delete(articleId);
-
     }
 
 }
