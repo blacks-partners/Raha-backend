@@ -63,6 +63,15 @@ public class UserService {
     }
 
     /**
+     * ユーザーの削除。
+     * 
+     * @param userId ユーザーID
+     */
+    public void delete(Integer userId) {
+        repository.delete(userId);
+    }
+
+    /*
      * ユーザー情報の更新。
      * 
      * @param userId ユーザーID

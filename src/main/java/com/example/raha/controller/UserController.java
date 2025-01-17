@@ -1,6 +1,8 @@
 package com.example.raha.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,8 +41,18 @@ public class UserController {
     }
 
     /**
-     * ユーザー情報の更新。
+     * ユーザーの削除。
      * 
+     * @param userId ユーザーID
+     */
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer userId) {
+        service.delete(userId);
+    }
+
+    /*
+     * ユーザー情報の更新。
      * @param userId ユーザーID
      * @param form ユーザー更新フォームの内容。
      */

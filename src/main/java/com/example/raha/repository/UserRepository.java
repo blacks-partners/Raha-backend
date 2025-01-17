@@ -89,6 +89,17 @@ public class UserRepository {
     }
 
     /**
+     * ユーザーの削除
+     * 
+     * @param userId ユーザーID
+     */
+    public void delete(Integer userId) {
+        String sql = "DELETE FROM users WHERE id = :userId;";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+        template.update(sql, param);
+    }
+
+    /*
      * ユーザー情報の更新。
      * 
      * @param userId ユーザーID
