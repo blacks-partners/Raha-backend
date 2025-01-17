@@ -42,6 +42,7 @@ public class UserRepository {
 
     /**
      * ユーザー情報詳細の取得
+     * 
      * @param id
      * @return User
      */
