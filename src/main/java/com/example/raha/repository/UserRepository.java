@@ -1,5 +1,7 @@
 package com.example.raha.repository;
 
+import java.time.LocalDateTime;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -9,15 +11,17 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 
 import lombok.RequiredArgsConstructor;
 
 /**
  * ユーザーに関するリポジトリクラス
  * 
- * @author 金丸天
+ * @author T.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -45,9 +49,10 @@ public class UserRepository {
     };
 
     /**
-     * ユーザー情報を取得
-     * @param id ID
-     * @return ユーザー情報
+     * ユーザー情報詳細の取得
+     * 
+     * @param id ユーザーID
+     * @return User ユーザー
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
@@ -93,6 +98,7 @@ public class UserRepository {
 
     /**
      * メールアドレスからユーザー情報を取得
+     * 
      * @param email メールアドレス
      * @return user ユーザー情報
      */
@@ -106,4 +112,33 @@ public class UserRepository {
             return null;
         }
     }
+    /**
+     * ユーザーの削除
+     * 
+     * @param userId ユーザーID
+     */
+    public void delete(Integer userId) {
+        String sql = "DELETE FROM users WHERE id = :userId;";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+        template.update(sql, param);
+    }
+
+    /*
+     * ユーザー情報の更新。
+     * 
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容。
+     */
+    public void update(Integer userId, UpdateUserForm form) {
+        String sql = "UPDATE users SET name = :name, email = :email, introduction = :introduction, updated_at = :updated_at WHERE id = :userId;";
+        LocalDateTime updateTime = LocalDateTime.now();
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("name", form.getName())
+                .addValue("email", form.getEmail())
+                .addValue("introduction", form.getIntroduction())
+                .addValue("updated_at", updateTime)
+                .addValue("userId", userId);
+        template.update(sql, param);
+    }
+
 }

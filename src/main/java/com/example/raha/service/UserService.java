@@ -12,6 +12,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 import com.example.raha.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するサービスクラス
  * 
- * @author 金丸天
+ * @author T.Kanamaru
  */
 @Service
 @Transactional
@@ -34,22 +35,20 @@ public class UserService {
     private String secret;
 
     /**
-     * ユーザー情報を取得
-     * 
-     * @param id ID
-     * @return ユーザー情報
+     * ユーザー情報詳細の取得。
+     * @param id ユーザーID
+     * @return user ユーザー
      */
     public User load(Integer id) {
         User user = repository.load(id);
         return user;
-
     }
 
     /**
      * ユーザー登録をする。
      * 
-     * @param user
-     * @return ユーザーIDを返す。
+     * @param user ユーザー
+     * @return id ユーザーID
      */
     public Integer register(RegisterUserForm form){
         form.setPassword(passwordEncoder.encode(form.getPassword()));
@@ -60,8 +59,8 @@ public class UserService {
     /**
      * メールアドレスを持っているユーザーを探す。
      * 
-     * @param email
-     * @return user
+     * @param email メールアドレス
+     * @return user ユーザー
      */
     public User findByEmail(String email){
         if(email == null){
@@ -94,4 +93,24 @@ public class UserService {
         headers.add("X-AUTH-TOKEN", "Bearer " + token);
         return headers;
     }
+
+    /**
+     * ユーザーの削除。
+     * 
+     * @param userId ユーザーID
+     */
+    public void delete(Integer userId) {
+        repository.delete(userId);
+    }
+
+    /*
+     * ユーザー情報の更新。
+     * 
+     * @param userId ユーザーID
+     * @param form ユーザー更新フォームの内容。
+     */
+    public void update(Integer userId, UpdateUserForm form) {
+        repository.update(userId, form);
+    }
+
 }
