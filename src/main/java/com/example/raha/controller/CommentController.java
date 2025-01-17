@@ -3,6 +3,7 @@ package com.example.raha.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.raha.form.CommentForm;
 import com.example.raha.service.CommentService;
@@ -14,7 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.net.URI;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 
 /**
@@ -36,9 +41,17 @@ public class CommentController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertComment(@RequestBody CommentForm comment) {
+    public ResponseEntity<Void> insertComment(@RequestBody CommentForm comment) {
 
-        commentService.insert(comment);
+    Integer commentId = commentService.insert(comment);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(commentId)
+                .toUri();
+
+                return ResponseEntity.created(location).build();
     }
 
     /**
