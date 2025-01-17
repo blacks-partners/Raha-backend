@@ -2,6 +2,7 @@ package com.example.raha.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,13 +35,21 @@ public class UserRepository {
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
+        return user;
+    };
+
+    @SuppressWarnings("null")
+    private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
+        User user = USER_NOPASS_ROWMAPPER.mapRow(rs, i);
+        user.setPassword(rs.getString("password"));
         return user;
     };
 
     /**
-     * ユーザー情報詳細の取得
-     * 
-     * @return user ユーザー情報
+     * ユーザー情報を取得
+     * @param id ID
+     * @return ユーザー情報
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
@@ -84,4 +93,19 @@ public class UserRepository {
         }
     }
 
+    /**
+     * メールアドレスからユーザー情報を取得
+     * @param email メールアドレス
+     * @return ユーザー情報
+     */
+    public User loadByEmail(String email) {
+        String sql = "SELECT id,name,email,password,introduction,created_at,updated_at FROM users WHERE email=:email";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
+        try {
+            return template.queryForObject(sql, param, USER_ROW_MAPPER);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }

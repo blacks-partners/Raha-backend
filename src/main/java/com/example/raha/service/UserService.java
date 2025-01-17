@@ -26,9 +26,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * ユーザー情報詳細の取得
+     * ユーザー情報を取得
      * 
-     * @return user ユーザー情報
+     * @param id ID
+     * @return ユーザー情報
      */
     public User load(Integer id) {
         User user = repository.load(id);
@@ -38,6 +39,7 @@ public class UserService {
 
     /**
      * ユーザー登録をする。
+     * 
      * @param user
      * @return ユーザーIDを返す。
      */
@@ -49,6 +51,7 @@ public class UserService {
 
     /**
      * メールアドレスを持っているユーザーを探す。
+     * 
      * @param email
      * @return user
      */
@@ -60,4 +63,13 @@ public class UserService {
         return user;
     }
 
+    /*
+     * メールアドレスからユーザー情報を取得
+     * 
+     * @param email メールアドレス
+     * @return ユーザー情報
+     */
+    public User loadByEmail(String email) {
+        return repository.loadByEmail(email);
+    }
 }
