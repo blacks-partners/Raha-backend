@@ -37,6 +37,14 @@ public class UserRepository {
         user.setIntroduction(rs.getString("introduction"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
+        return user;
+    };
+
+    @SuppressWarnings("null")
+    private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
+        User user = USER_NOPASS_ROWMAPPER.mapRow(rs, i);
+        user.setPassword(rs.getString("password"));
         return user;
     };
 
@@ -57,7 +65,7 @@ public class UserRepository {
      * ユーザー登録処理。
      *
      * @param user ユーザー
-     * @return id ユーザーID
+     * @return userId ユーザーID
      */
     @SuppressWarnings("null")
     public Integer insert(RegisterUserForm form) {
@@ -67,15 +75,15 @@ public class UserRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
         template.update(sql, param, keyHolder, keyColumnName);
-        Integer id = keyHolder.getKey().intValue();
-        return id;
+        Integer userId = keyHolder.getKey().intValue();
+        return userId;
     }
 
     /**
      * メールアドレスが存在するかの確認。
      *
      * @param email メールアドレス
-     * @return Userかnull ユーザーかnullを返す。
+     * @return User ユーザー
      */
     public User findByEmail(String email) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
@@ -88,6 +96,22 @@ public class UserRepository {
         }
     }
 
+    /**
+     * メールアドレスからユーザー情報を取得
+     * 
+     * @param email メールアドレス
+     * @return user ユーザー情報
+     */
+    public User loadByEmail(String email) {
+        String sql = "SELECT id,name,email,password,introduction,created_at,updated_at FROM users WHERE email=:email";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
+        try {
+            return template.queryForObject(sql, param, USER_ROW_MAPPER);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
     /**
      * ユーザーの削除
      * 
