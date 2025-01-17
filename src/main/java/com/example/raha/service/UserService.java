@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するサービスクラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Service
 @RequiredArgsConstructor

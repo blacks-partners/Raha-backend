@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するコントローラークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @RestController
 @RequestMapping("/users")

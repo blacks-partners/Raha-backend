@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 記事に関するコントローラークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @RestController
 @RequiredArgsConstructor
