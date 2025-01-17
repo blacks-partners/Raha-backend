@@ -1,8 +1,6 @@
 package com.example.raha.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -61,8 +59,8 @@ public class UserRepository {
     /**
      * ユーザー登録処理。
      *
-     * @param user
-     * @return ユーザーID
+     * @param user ユーザー
+     * @return userId ユーザーID
      */
     @SuppressWarnings("null")
     public Integer insert(RegisterUserForm form) {
@@ -72,15 +70,15 @@ public class UserRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] keyColumnName = { "id" };
         template.update(sql, param, keyHolder, keyColumnName);
-        Integer id = keyHolder.getKey().intValue();
-        return id;
+        Integer userId = keyHolder.getKey().intValue();
+        return userId;
     }
 
     /**
      * メールアドレスが存在するかの確認。
      *
-     * @param email
-     * @return Userかnull。
+     * @param email メールアドレス
+     * @return User ユーザー
      */
     public User findByEmail(String email) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
@@ -96,7 +94,7 @@ public class UserRepository {
     /**
      * メールアドレスからユーザー情報を取得
      * @param email メールアドレス
-     * @return ユーザー情報
+     * @return user ユーザー情報
      */
     public User loadByEmail(String email) {
         String sql = "SELECT id,name,email,password,introduction,created_at,updated_at FROM users WHERE email=:email";
