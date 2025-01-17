@@ -67,7 +67,7 @@ public class UserService {
      * ユーザー情報の更新。
      * 
      * @param userId ユーザーID
-     * @param form ユーザー更新フォームの内容(名前、メールアドレス、自己紹介)
+     * @param form ユーザー更新フォームの内容。
      */
     public void update(Integer userId, UpdateUserForm form) {
         repository.update(userId, form);
