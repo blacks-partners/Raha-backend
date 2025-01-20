@@ -84,8 +84,8 @@ public class ArticleService {
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId) {
-        articleRepository.delete(articleId);
+    public void delete(Integer articleId, Integer userId) {
+        articleRepository.delete(articleId, userId);
     }
 
 }

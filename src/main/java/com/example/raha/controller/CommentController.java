@@ -20,6 +20,7 @@ import java.net.URI;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 /**
@@ -73,6 +74,10 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Integer commentId) {
-        commentService.delete(commentId);
+        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
+            return;
+        }
+        commentService.delete(commentId, userId);
     }
 }
