@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,7 +108,12 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer articleId) {
-        articleService.delete(articleId);
+        String userIdText = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userIdText == null) {
+            return;
+        }
+        Integer userId = Integer.parseInt(userIdText);
+        articleService.delete(articleId, userId);
 
     }
 
