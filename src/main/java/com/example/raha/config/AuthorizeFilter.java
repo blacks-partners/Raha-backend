@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthorizeFilter extends OncePerRequestFilter {
-    private final AntPathRequestMatcher matcher = new AntPathRequestMatcher("login");
+    private final AntPathRequestMatcher matcher = new AntPathRequestMatcher("/login");
 
     @Autowired
     @Value("${jwt.secret}")
@@ -66,7 +66,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"認証に失敗しました。再度ログインしてください。\"}");
+                response.getWriter().write("{\"message\":\"ログインしてください。\"}");
                 return;
             }
         }
