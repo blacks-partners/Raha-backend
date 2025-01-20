@@ -18,6 +18,9 @@ import com.example.raha.form.LoginForm;
 import com.example.raha.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  * アカウントコントローラー

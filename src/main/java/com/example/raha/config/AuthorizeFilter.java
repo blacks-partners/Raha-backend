@@ -44,6 +44,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             }
 
             // トークンの "Bearer " 部分を取り除き、実際のトークンを取得
+            try {
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
                     .verify(xAuthToken.substring(7));
 
@@ -53,6 +54,13 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             // 認証情報を作成し、セキュリティコンテキストに設定
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>()));
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"message\":\"Unauthorized\"}");
+                return;
+            }
         }
         filterChain.doFilter(request, response);
     }
