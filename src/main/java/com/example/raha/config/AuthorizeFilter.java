@@ -58,7 +58,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"ログインしてください\"}");
+                response.getWriter().write("{\"message\":\"ログインしてください。\"}");
                 return;
             }
 
@@ -83,7 +83,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"ログインしてください。\"}");
+                response.getWriter().write("{\"message\":\"認証に失敗しました。再度ログインしてください。\"}");
                 return;
             }
         }
