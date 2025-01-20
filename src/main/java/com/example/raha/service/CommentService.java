@@ -45,7 +45,7 @@ public class CommentService {
      * 
      * @param commentId コメントID
      */
-    public void delete(Integer commentId) {
-        commentRepository.delete(commentId);
+    public void delete(Integer commentId, Integer userId) {
+        commentRepository.delete(commentId, userId);
     }
 }

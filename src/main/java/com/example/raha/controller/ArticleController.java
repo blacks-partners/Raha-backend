@@ -108,13 +108,11 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer articleId) {
-        String userIdText = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userIdText == null) {
+        Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
             return;
         }
-        Integer userId = Integer.parseInt(userIdText);
         articleService.delete(articleId, userId);
-
     }
 
 }
