@@ -13,6 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import jakarta.servlet.FilterChain;
@@ -54,11 +56,17 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             // 認証情報を作成し、セキュリティコンテキストに設定
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>()));
-            } catch (Exception e) {
+            } catch (TokenExpiredException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"Unauthorized\"}");
+                response.getWriter().write("{\"message\":\"セッションが切れました。再度ログインしてください。\"}");
+                return;
+            } catch (JWTVerificationException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"message\":\"認証に失敗しました。再度ログインしてください。\"}");
                 return;
             }
         }
