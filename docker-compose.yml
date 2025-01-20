@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raha-backend-container
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_URL=jdbc:postgresql://db:5432/raha
+    volumes:
+      - ./src:/app/src
+      - ./target/classes:/app/target/classes
+      - ./pom.xml:/app/pom.xml
+    platform: linux/amd64
+
+  db:
+    image: postgres:15
+    container_name: raha-db-container
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: raha
+
+volumes:
+  db-store:
+  node_modules:
