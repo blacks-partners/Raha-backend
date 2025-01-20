@@ -45,17 +45,17 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                 return;
             }
 
-            // トークンの "Bearer " 部分を取り除き、実際のトークンを取得
             try {
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
-                    .verify(xAuthToken.substring(7));
+                // トークンの "Bearer " 部分を取り除き、実際のトークンを取得
+                DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build()
+                        .verify(xAuthToken.substring(7));
 
-            // デコードされたJWTから "userId" クレームを取得し、ユーザー名として使用
-            String userId = decodedJWT.getClaim("userId").toString();
+                // デコードされたJWTから "userId" クレームを取得し、ユーザー名として使用
+                String userId = decodedJWT.getClaim("userId").toString();
 
-            // 認証情報を作成し、セキュリティコンテキストに設定
-            SecurityContextHolder.getContext()
-                    .setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>()));
+                // 認証情報を作成し、セキュリティコンテキストに設定
+                SecurityContextHolder.getContext()
+                        .setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>()));
             } catch (TokenExpiredException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
