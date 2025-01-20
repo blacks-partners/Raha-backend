@@ -48,7 +48,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                     .verify(xAuthToken.substring(7));
 
             // デコードされたJWTから "userId" クレームを取得し、ユーザー名として使用
-            String userId = decodedJWT.getClaim("userId").toString();
+            Integer userId = Integer.parseInt(decodedJWT.getClaim("userId").toString());
 
             // 認証情報を作成し、セキュリティコンテキストに設定
             SecurityContextHolder.getContext()
