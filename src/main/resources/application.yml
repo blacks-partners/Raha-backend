@@ -1,9 +1,8 @@
 spring:
+  profiles:
+    active: local
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/raha
-    username: raha
-    password: postgres
   devtools:
     restart:
       enabled: true

@@ -9,6 +9,7 @@ services:
     depends_on:
       - db
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_URL=jdbc:postgresql://db:5432/raha
