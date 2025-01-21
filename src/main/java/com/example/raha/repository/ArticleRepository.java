@@ -183,14 +183,14 @@ public class ArticleRepository {
      * 
      * @param articleId 対象の記事ID
      */
-    public void update(ArticleForm article, Integer articleId) {
-        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id";
+    public void update(ArticleForm article, Integer articleId, Integer userId) {
+        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id AND user_id=:userId";
 
         LocalDateTime now = LocalDateTime.now();
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
                 .addValue("content", article.getContent())
-                .addValue("id", articleId).addValue("updatedAt", now);
+                .addValue("id", articleId).addValue("updatedAt", now).addValue("userId", userId);
 
         jdbcTemplate.update(sql, param);
 

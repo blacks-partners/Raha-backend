@@ -74,8 +74,8 @@ public class ArticleService {
      * 
      * @param articleId 対象の記事ID
      */
-    public void update(ArticleForm article, Integer articleId) {
-        articleRepository.update(article, articleId);
+    public void update(ArticleForm article, Integer articleId, Integer userId) {
+        articleRepository.update(article, articleId, userId);
 
     }
 
