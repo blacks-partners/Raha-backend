@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,8 +35,8 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             Arrays.asList(
                 new AntPathRequestMatcher("/login"),
                 new AntPathRequestMatcher("/register"),
-                new AntPathRequestMatcher("/articles/*"),
-                new AntPathRequestMatcher("/articles")
+                new AntPathRequestMatcher("/articles/*", HttpMethod.GET.name()),
+                new AntPathRequestMatcher("/articles", HttpMethod.GET.name())
             )
         );
     }
