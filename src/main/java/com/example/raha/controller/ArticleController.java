@@ -90,7 +90,7 @@ public class ArticleController {
     /**
      * 記事内容の更新
      * 
-     * @param article   更新する気情報
+     * @param article   更新する記事情報
      * @param articleId 対象の記事ID
      */
     @PutMapping("/{articleId}")

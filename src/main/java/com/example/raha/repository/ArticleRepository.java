@@ -176,12 +176,12 @@ public class ArticleRepository {
         return articleList;
     }
 
-    /*
+    /**
      * 記事内容の更新
      * 
-     * @param article 更新する気情報
-     * 
+     * @param article   更新する記事情報
      * @param articleId 対象の記事ID
+     * @param userId    記事を更新するユーザーID
      */
     public void update(ArticleForm article, Integer articleId, Integer userId) {
         String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id AND user_id=:userId";
