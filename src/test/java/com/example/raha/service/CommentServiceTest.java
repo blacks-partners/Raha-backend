@@ -57,9 +57,9 @@ public class CommentServiceTest {
         comment.setArticleId(1);
         comment.setContent("内容が分かりやすくまとめられていて、非常に参考になりました");
 
-        commentService.update(comment, comment.getCommentId());
+        commentService.update(comment, comment.getCommentId(), comment.getUserId());
 
-        verify(commentRepository, times(1)).update(comment, comment.getCommentId());
+        verify(commentRepository, times(1)).update(comment, comment.getCommentId(), comment.getUserId());
     }
 
     @Test

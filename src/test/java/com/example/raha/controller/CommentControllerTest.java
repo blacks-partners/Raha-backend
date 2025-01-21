@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.example.raha.domain.User;
+import com.example.raha.form.CommentForm;
 import com.example.raha.service.CommentService;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,13 +43,6 @@ public class CommentControllerTest {
         SecurityContextHolder.setContext(securityContext);
     }
 
-    
-    
-    @Test
-    void testDeleteComment() {
-        
-    }
-
     @Test
     void testInsertComment() {
 
@@ -55,6 +50,21 @@ public class CommentControllerTest {
 
     @Test
     void testUpdateComment() {
+        Integer commentId = 1;
+        String userId = "1";
 
+        CommentForm commentForm = new CommentForm();
+        commentForm.setArticleId(1);
+        commentForm.setUserId(1);
+        commentForm.setContent("Updated comment");
+
+        User user = new User();
+        
+
+    }
+
+    @Test
+    void testDeleteComment() {
+        
     }
 }

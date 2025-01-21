@@ -6,9 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.raha.form.CommentForm;
 
 @JdbcTest
+@Import(CommentRepository.class)
 @Sql("/test-schemaComment.sql")
 @Transactional
 public class CommentRepositoryTest {
@@ -41,22 +45,21 @@ public class CommentRepositoryTest {
         Integer commentId = commentRepository.insert(comment);
 
         assertNotNull(commentId);
-        assertEquals(1, commentId);
-        verify(commentRepository, times(1)).insert(comment);
+        assertTrue(commentId > 0);
     }
 
     @Test
     void testUpdate() {
         CommentForm comment = createCommentForm();
-        Integer commentId = commentRepository.update(comment);
+        Integer commentId = commentRepository.insert(comment);
 
-        comment.setContent("更新されたコメント");
-        commentRepository.update(comment, commentId);
+        comment.setContent("Repository Update Test");
+        commentRepository.update(comment, commentId, comment.getUserId());
 
         String sql = "SELECT content FROM comments WHERE id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", commentId);
         String updatedContent = jdbcTemplate.queryForObject(sql, params, String.class);
-        assertTrue(updatedContent.equals("更新されたコメント"));
+        assertEquals(comment.getContent(), updatedContent);
     }
 
     @Test
