@@ -3,22 +3,34 @@ package com.example.raha.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.time.Instant;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.TestPropertySource;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
 @SpringBootTest
+@TestPropertySource(properties = "jwt.secret=test_secret")
 public class SecurityUserServiceTest {
     
-    @InjectMocks
+    @Autowired
     private SecurityUserService securityUserService;
 
     @Mock
@@ -51,5 +63,58 @@ public class SecurityUserServiceTest {
         when(userRepository.loadByEmail(email)).thenReturn(null);
 
         assertNull(securityUserService.loadUserByUsername(email));
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    public void testCreateJwtHeader_checkBearer() {
+        Integer userId = 1;
+        HttpHeaders headers = securityUserService.createJwtHeader(userId);
+
+        // プレフィックスがBearer であることを確認
+        assertEquals("Bearer ", headers.get("X-AUTH-TOKEN").get(0).substring(0, 7));
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    public void testCreateJwtHeader_checkToken() {
+        Integer userId = 1;
+        HttpHeaders headers = securityUserService.createJwtHeader(userId);
+
+        // トークンが正しく生成されていることを確認
+        String token = headers.get("X-AUTH-TOKEN").get(0).substring(7);
+        DecodedJWT decodedJWT = JWT.decode(token);
+        assertEquals(1, decodedJWT.getClaim("userId").asInt());
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    public void testCreateJwtHeader_checkExpiration() {
+        Integer userId = 1;
+        HttpHeaders headers = securityUserService.createJwtHeader(userId);
+
+        // トークンの有効期限が1日であることを確認
+        String token = headers.get("X-AUTH-TOKEN").get(0).substring(7);
+        DecodedJWT decodedJWT = JWT.decode(token);
+        Instant expiresAt = decodedJWT.getExpiresAt().toInstant();
+        Instant now = Instant.now();
+        Instant expiration = now.plusSeconds(60 * 60 * 24);
+        assertTrue(expiresAt.isAfter(now.plusSeconds(60 * 60 * 23)) && expiresAt.isBefore(expiration.plusSeconds(1)));
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    public void testCreateJwtHeader_checkSecret() {
+        Integer userId = 1;
+        HttpHeaders headers = securityUserService.createJwtHeader(userId);
+
+        // トークンが正しく生成されていることを確認
+        String token = headers.get("X-AUTH-TOKEN").get(0).substring(7);
+        // シークレットキーが正しいことを確認
+        String secret = "test_secret";
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT verifiedJWT = verifier.verify(token);
+        assertEquals(1, verifiedJWT.getClaim("userId").asInt());
     }
 }
