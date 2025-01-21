@@ -3,6 +3,7 @@ package com.example.raha.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import javax.sql.DataSource;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,13 @@ public class UserRepositoryTest {
     void testUpdate() {
         
 
+    }
+
+    @AfterAll
+    static void testAfterAll(@Autowired DataSource dataSource) {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScripts(
+        new ClassPathResource("/testData.sql"));
+        populator.execute(dataSource);
     }
 }
