@@ -36,7 +36,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/articles/*").permitAll()
+                .requestMatchers(HttpMethod.GET,"/articles", "/articles/*").permitAll()
                 .anyRequest().authenticated());
 
         // カスタムの認可フィルタをセキュリティフィルタチェーンに追加
