@@ -15,6 +15,11 @@ import org.mockito.Mock;
 import com.example.raha.form.CommentForm;
 import com.example.raha.repository.CommentRepository;
 
+/**
+ * CommentServiceのテストクラス
+ * 
+ * @author K.Kawachino
+ */
 @ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 public class CommentServiceTest {
 
