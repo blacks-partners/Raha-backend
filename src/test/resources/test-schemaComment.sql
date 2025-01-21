@@ -1,85 +1,13 @@
--- @auther KANAMARU
-
--- ユーザーテーブル作成
-drop table if exists users cascade;
-
-CREATE TABLE  users
-(id serial PRIMARY KEY,
-name varchar(50) NOT NULL,
-email varchar(50) NOT NULL UNIQUE,
-password varchar(100) NOT NULL,
-introduction varchar(150),
-created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-
--- 記事テーブル作成
-drop table if exists articles cascade;
-
-CREATE TABLE articles (
-    id serial PRIMARY KEY,
-        title varchar(50) NOT NULL,
-    content varchar(10000) NOT NULL,
-    user_id integer NOT NULL, -- user_idをカラムとして定義し、NOT NULLを設定
-created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 -- コメントテーブル作成
-drop table if exists comments cascade;
+DROP TABLE IF EXISTS comments CASCADE;
 
-CREATE TABLE comments(
-id serial PRIMARY KEY,
-user_id integer NOT NULL,
-article_id integer NOT NULL,
-content varchar(500) NOT NULL,
-created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
-);
-
-
--- ユーザーテーブルにデモ情報の追加
-INSERT INTO users (name,email, password, Introduction)
-VALUES 
-(
-    '田中太郎',
-    'demo_user@example.com', 
-    '$2a$08$byIzNL7VbGIs6xVIi05.lOPtZa3CxnYVIzmGbI.Rnt3y3F98VwtO6',  --pw:tanaka
-    'こんにちは、デモユーザーです。'
-);
-
--- 記事テーブルにデモ情報の追加
-INSERT INTO articles (title, content, user_id)
-VALUES
-(
-    'はじめての投稿',
-    'この記事はデモ用の最初の投稿です。内容は自由に編集できます。',
-    1
-),
-(
-    'データベースの基本',
-    'この記事では、データベースの基本について説明します。RDBMSの概念やSQLの基本文法を紹介します。',
-    1
-),
-(
-    'Webアプリ開発の流れ',
-    'この投稿では、Webアプリ開発の基本的な流れについて解説します。設計、実装、テスト、デプロイの順を追って説明します。',
-    1
-),
-(
-    'セキュリティの重要性',
-    'この記事では、アプリケーション開発におけるセキュリティの重要性を取り上げます。パスワードのハッシュ化やSQLインジェクション対策について触れます。',
-    1
-),
-(
-    'プログラミングの楽しさ',
-    'この記事では、プログラミングの魅力と楽しさについて共有します。学び続けることで得られる成長や達成感に焦点を当てています。',
-    1
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    article_id INTEGER NOT NULL,
+    content VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 );
 
 -- コメントテーブルにデモ情報の追加
