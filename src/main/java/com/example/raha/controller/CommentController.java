@@ -64,12 +64,13 @@ public class CommentController {
     @PutMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
-        commentService.update(comment, commentId);
+        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        commentService.update(comment, commentId, userId);
     }
     /**
      * コメントの削除
      * 
-     * @param commentId
+     * @param commentId コメントID
      */
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

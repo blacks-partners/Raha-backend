@@ -36,8 +36,8 @@ public class CommentService {
      * @param comment コメント情報
      * @param commentId 更新するコメントID
      */
-    public void update(CommentForm comment, Integer commentId) {
-        commentRepository.update(comment, commentId);
+    public void update(CommentForm comment, Integer commentId, Integer userId) {
+        commentRepository.update(comment, commentId, userId);
     }
     
     /**
