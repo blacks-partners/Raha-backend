@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ public class ArticleServiceTest {
     private ArticleService articleService;
 
     @Test
+    @DisplayName("testFindAll()の正常系")
     void testFindAll() {
 
         LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
@@ -44,18 +46,18 @@ public class ArticleServiceTest {
         articleList.add(article2);
 
         doReturn(articleList).when(articleRepository).findAll();
-        // when(articleRepository.findAll
 
-        // Act
         List<Article> articles = articleService.findAll();
 
-        // Assert
         assertNotNull(articles);
+        assertEquals(articleList.get(0).getTitle(), article1.getTitle());
         assertEquals(2, articles.size());
+        verify(articleRepository).findAll();
 
     }
 
     @Test
+    @DisplayName("testArticleDetails()の正常系")
     void testArticleDetails() {
 
         LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
@@ -71,13 +73,14 @@ public class ArticleServiceTest {
 
         Article articleTest = articleService.articleDetails(articleId);
 
-        // Assert
         assertNotNull(articleTest);
         assertEquals("タイトル1", articleTest.getTitle());
+        verify(articleRepository).articleDetails(any());
 
     }
 
     @Test
+    @DisplayName("testInsert()の正常系")
     void testInsert() {
         ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
 
@@ -92,16 +95,16 @@ public class ArticleServiceTest {
 
         doReturn(articleId).when(articleRepository).insert(articleForm);
 
-        // Act
         Integer articleIdTest = articleService.insert(articleForm);
 
-        // Assert
         assertNotNull(articleIdTest);
         assertEquals(1, articleId);
+        verify(articleRepository).insert(any());
 
     }
 
     @Test
+    @DisplayName("testUserArticleFindAll()の正常系")
     void testUserArticleFindAll() {
 
         Integer userId = 1;
@@ -124,10 +127,13 @@ public class ArticleServiceTest {
 
         assertNotNull(articlesListTest);
         assertEquals(2, articlesListTest.size());
+        assertEquals(articlesListTest.get(0).getTitle(), article1.getTitle());
+        verify(articleRepository).userArticleFindAll(any());
 
     }
 
     @Test
+    @DisplayName("testUpdate()の正常系")
     void testUpdate() {
         Integer articleId = 1;
 
@@ -141,6 +147,7 @@ public class ArticleServiceTest {
     }
 
     @Test
+    @DisplayName("testDelete()の正常系")
     void testDelete() {
 
         Integer articleId = 1;
