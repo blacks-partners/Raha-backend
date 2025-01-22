@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.form.CommentForm;
 
-@JdbcTest
+@SpringBootTest
 @Import(CommentRepository.class)
-@Sql("/test-schemaComment.sql")
+@Sql("/TestSql.sql")
 @Transactional
 public class CommentRepositoryTest {
 

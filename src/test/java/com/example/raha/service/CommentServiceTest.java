@@ -52,7 +52,7 @@ public class CommentServiceTest {
     @Test
     void testUpdate() {
         CommentForm comment = createCommentForm();
-        comment.setCommentId(2);
+        comment.setCommentId(1);
         comment.setUserId(1);
         comment.setArticleId(1);
         comment.setContent("内容が分かりやすくまとめられていて、非常に参考になりました");
