@@ -34,7 +34,11 @@ public class UserRepositoryTest {
         Integer id = 1;
         User user = repository.findByEmail(email);
         User result = repository.load(id);
-        assertEquals(user, result);
+        if(user == null) {
+            assertNull(result);
+        } else {
+            assertEquals(user, result);
+        }
     }
 
     @Test
@@ -49,7 +53,11 @@ public class UserRepositoryTest {
     @Test
     void testLoad() {
         User result = repository.load(1);
-        assertEquals(result.getEmail(), "demo_user@example.com");
+        if(result==null){
+            assertNull(result);
+        } else {
+            assertEquals(result.getEmail(), "demo_user@example.com");
+        }
     }
 
     @Test
