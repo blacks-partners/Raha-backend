@@ -9,10 +9,10 @@ import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,7 +23,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class SecurityUserServiceTest {
     
     @Autowired
@@ -34,7 +34,6 @@ public class SecurityUserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         String secret = "test_secret";
         securityUserService = new SecurityUserService(secret, userRepository);
     }

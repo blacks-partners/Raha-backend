@@ -15,8 +15,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * SecurityConfigクラスで使用するユーザーサービス
  * 
