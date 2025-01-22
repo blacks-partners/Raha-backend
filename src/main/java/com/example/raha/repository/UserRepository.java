@@ -57,8 +57,12 @@ public class UserRepository {
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
         SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
-        User user = template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
-        return user;
+        try {
+            User user = template.queryForObject(sql, param, USER_NOPASS_ROWMAPPER);
+            return user;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     /**
