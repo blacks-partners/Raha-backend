@@ -19,7 +19,7 @@ services:
     platform: linux/amd64
 
   db:
-    image: postgres:16
+    image: postgres:17
     container_name: raha-db-container
     ports:
       - 5432:5432
