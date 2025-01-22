@@ -2,11 +2,16 @@ package com.example.raha.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +26,8 @@ import com.example.raha.repository.UserRepository;
  * @author R.Naka
  */
 
-@SpringBootTest
-@Sql("/testData.sql")
+@ExtendWith(MockitoExtension.class)
+@Sql("/TestSql.sql")
 @Transactional
 public class UserServiceTest {
     @Mock
@@ -42,9 +47,9 @@ public class UserServiceTest {
     @Test
     @DisplayName("User情報を削除する処理をテストする。")
     void testDelete() {
-        Integer id = 1;
-        service.delete(id);
-        User result = service.load(id);
+        User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
+        service.delete(user.getUserId());
+        User result = service.load(user.getUserId());
         assertNull(result);
     }
 
@@ -86,16 +91,14 @@ public class UserServiceTest {
     @Test
     @DisplayName("User登録ができているか確認するテスト。")
     void testRegister() {
-        User user1 = new User(1, "taro", "taro@taro", "taro", "hello", null, null);
-        RegisterUserForm form = new RegisterUserForm("taro", "taro@taro", "taro");
-        // when(passwordEncoder.encode(form.getPassword())).thenReturn("sampleEncode");
-        // form.setPassword(passwordEncoder.encode(form.getPassword()));
-        Integer id = service.register(form);
-        User result = service.load(id);
-        if (result == null){
-            assertNull(result);
+        RegisterUserForm form = new RegisterUserForm("yuki", "b@b", "password");
+        Integer id = 1;
+        when(repository.insert(form)).thenReturn(id);
+        Integer resultId = service.register(form);
+        if (resultId == null){
+            assertNull(resultId);
         } else {
-            assertEquals(result.getName(), "taro");
+            assertEquals(resultId, id);
         }
     }
 

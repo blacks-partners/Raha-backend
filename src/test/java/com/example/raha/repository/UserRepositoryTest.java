@@ -20,7 +20,7 @@ import com.example.raha.form.UpdateUserForm;
  */
 
 @SpringBootTest
-@Sql("/testData.sql")
+@Sql("/TestSql.sql")
 @Transactional
 public class UserRepositoryTest {
 
