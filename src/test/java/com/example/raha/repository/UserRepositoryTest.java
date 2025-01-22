@@ -1,6 +1,7 @@
 package com.example.raha.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,29 +9,41 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.domain.User;
+import com.example.raha.form.RegisterUserForm;
+import com.example.raha.form.UpdateUserForm;
 
 @SpringBootTest
 @Sql("/testData.sql")
 @Transactional
 public class UserRepositoryTest {
-    
+
     @Autowired
     private UserRepository repository;
 
     @Test
     void testDelete() {
-        // repository.delete(1);
-        // verify(this.repository, times(1)).delete(1);
+        Integer userId = 1;
+        repository.delete(userId);
+        User result = repository.load(userId);
+        assertNull(result);
     }
 
     @Test
     void testFindByEmail() {
-
+        String email = "demo_user@example.com";
+        Integer id = 1;
+        User user = repository.findByEmail(email);
+        User result = repository.load(id);
+        assertEquals(user, result);
     }
 
     @Test
     void testInsert() {
-
+        RegisterUserForm form = new RegisterUserForm("taro", "taro@taro", "taro");
+        Integer id = 2;
+        repository.insert(form);
+        User result = repository.load(id);
+        assertEquals(result.getName(), "taro");
     }
 
     @Test
@@ -48,7 +61,10 @@ public class UserRepositoryTest {
 
     @Test
     void testUpdate() {
-        
-
+        UpdateUserForm form = new UpdateUserForm("taro", "taro@taro", "taroです。");
+        Integer id = 1;
+        repository.update(id, form);
+        User result = repository.load(id);
+        assertEquals(result.getName(), "taro");
     }
 }
