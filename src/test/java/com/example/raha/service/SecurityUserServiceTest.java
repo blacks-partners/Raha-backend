@@ -2,22 +2,19 @@ package com.example.raha.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.TestPropertySource;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -27,7 +24,6 @@ import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
 @SpringBootTest
-@TestPropertySource(properties = "jwt.secret=test_secret")
 public class SecurityUserServiceTest {
     
     @Autowired
@@ -35,6 +31,13 @@ public class SecurityUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        String secret = "test_secret";
+        securityUserService = new SecurityUserService(secret, userRepository);
+    }
 
     @Test
     public void testLoadUserByUsername() {
