@@ -29,8 +29,8 @@ public class UserService {
 
     private final UserRepository repository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
     @Value("${jwt.secret}")
     private String secret;
 
