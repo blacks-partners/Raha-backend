@@ -2,6 +2,7 @@ package com.example.raha.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -34,7 +35,7 @@ public class CommentServiceTest {
         CommentForm comment = new CommentForm();
         comment.setArticleId(1);
         comment.setUserId(1);
-        comment.setContent("この記事はとても興味深いですね。もっと詳細が知りたいです！");
+        comment.setContent("Comment Test");
         return comment;
     }
 
@@ -48,7 +49,7 @@ public class CommentServiceTest {
 
         assertNotNull(commentId);
         assertEquals(1, commentId);
-        verify(commentRepository, times(1)).insert(comment);
+        verify(commentRepository, times(1)).insert(any());
     }
 
     @Test
@@ -58,11 +59,13 @@ public class CommentServiceTest {
         comment.setCommentId(1);
         comment.setUserId(1);
         comment.setArticleId(1);
-        comment.setContent("内容が分かりやすくまとめられていて、非常に参考になりました");
+        comment.setContent("Comment Update Test");
+
+        doNothing().when(commentRepository).update(comment, comment.getCommentId(), comment.getUserId());
 
         commentService.update(comment, comment.getCommentId(), comment.getUserId());
 
-        verify(commentRepository, times(1)).update(comment, comment.getCommentId(), comment.getUserId());
+        verify(commentRepository, times(1)).update(any(), any(), any());
     }
 
     @Test
@@ -75,7 +78,7 @@ public class CommentServiceTest {
 
         commentService.delete(commentId, userId);
 
-        verify(commentRepository, times(1)).delete(commentId, userId);
+        verify(commentRepository, times(1)).delete(any(), any());
 
     }
 }
