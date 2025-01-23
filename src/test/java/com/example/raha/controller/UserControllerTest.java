@@ -1,11 +1,17 @@
 package com.example.raha.controller;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.raha.domain.User;
+import com.example.raha.form.UpdateUserForm;
 import com.example.raha.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * UserControllerクラスのテスト。
@@ -36,22 +46,44 @@ public class UserControllerTest {
     @MockitoBean
     private UserService service;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     @DisplayName("Userの退会処理を確認するテスト。")
-    void testDelete() throws Exception{
+    void testDelete() throws Exception {
         User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
         Integer userId = user.getUserId();
         Mockito.when(service.load(userId)).thenReturn(user);
 
         mockMvc.perform(
                 delete("/users/{userId}", 1)
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void testUpdate() {
+    @DisplayName("User情報の更新処理を確認するメソッド。")
+    void testUpdate() throws Exception {
+        User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
+        Integer userId = user.getUserId();
 
+        UpdateUserForm form = new UpdateUserForm("keta", "keta@keta", "ketaです。");
+
+        doNothing().when(service).update(userId, form);
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", "keta");
+        data.put("email", "keta@keta");
+        data.put("introduction", "password");
+        String requestBody = objectMapper.writeValueAsString(data);
+
+        mockMvc.perform(
+                put("/users/{userId}", 1)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+                        )
+                .andExpect(status().isNoContent())
+                ;
     }
 
     @Test
@@ -68,7 +100,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.length()").value(7))
                 .andExpect(jsonPath("$.name").value("taro"))
 
-                ;
+        ;
 
     }
 }
