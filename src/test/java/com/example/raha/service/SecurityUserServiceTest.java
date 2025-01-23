@@ -3,16 +3,19 @@ package com.example.raha.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,9 +27,10 @@ import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("SecurityUserServiceのテスト")
 public class SecurityUserServiceTest {
-    
-    @Autowired
+
+    @InjectMocks
     private SecurityUserService securityUserService;
 
     @Mock
@@ -35,16 +39,17 @@ public class SecurityUserServiceTest {
     @BeforeEach
     public void setUp() {
         String secret = "test_secret";
-        securityUserService = new SecurityUserService(secret, userRepository);
+        this.securityUserService = new SecurityUserService(secret, userRepository);
     }
 
     @Test
+    @DisplayName("ユーザーを取得するテスト")
     public void testLoadUserByUsername() {
         User user = new User();
         user.setUserId(1);
         user.setName("test");
         user.setEmail("test@example.com");
-        user.setPassword("password");
+        user.setPassword("$2a$08$OzRaRXUgQAuwWMxO6zsvs.YSqqlfK1FKgb/ZW3CosELQitiHx42oS");
         user.setIntroduction("test introduction");
         user.setCreatedAt(null);
         user.setUpdatedAt(null);
@@ -54,21 +59,25 @@ public class SecurityUserServiceTest {
         when(userRepository.loadByEmail(email)).thenReturn(user);
 
         UserDetails userDetails = securityUserService.loadUserByUsername(email);
-        
+
         assertEquals(user.getEmail(), userDetails.getUsername());
+        verify(userRepository, times(1)).loadByEmail(email);
     }
 
     @Test
+    @DisplayName("ユーザーが見つからない場合のテスト")
     public void testLoadUserByUsername_NotFound() {
         String email = "null@example.com";
 
         when(userRepository.loadByEmail(email)).thenReturn(null);
 
         assertNull(securityUserService.loadUserByUsername(email));
+        verify(userRepository, times(1)).loadByEmail(email);
     }
 
     @SuppressWarnings("null")
     @Test
+    @DisplayName("JWTヘッダーのプレフィックスを確認するテスト")
     public void testCreateJwtHeader_checkBearer() {
         Integer userId = 1;
         HttpHeaders headers = securityUserService.createJwtHeader(userId);
@@ -79,6 +88,7 @@ public class SecurityUserServiceTest {
 
     @SuppressWarnings("null")
     @Test
+    @DisplayName("JWTのトークンを確認するテスト")
     public void testCreateJwtHeader_checkToken() {
         Integer userId = 1;
         HttpHeaders headers = securityUserService.createJwtHeader(userId);
@@ -91,6 +101,7 @@ public class SecurityUserServiceTest {
 
     @SuppressWarnings("null")
     @Test
+    @DisplayName("JWTの有効期限を確認するテスト")
     public void testCreateJwtHeader_checkExpiration() {
         Integer userId = 1;
         HttpHeaders headers = securityUserService.createJwtHeader(userId);
@@ -106,6 +117,7 @@ public class SecurityUserServiceTest {
 
     @SuppressWarnings("null")
     @Test
+    @DisplayName("JWTのシークレットキーを確認するテスト")
     public void testCreateJwtHeader_checkSecret() {
         Integer userId = 1;
         HttpHeaders headers = securityUserService.createJwtHeader(userId);
