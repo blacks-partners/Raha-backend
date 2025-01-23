@@ -142,7 +142,7 @@ public class ArticleRepositoryTest {
         Integer articleId = articleRepository.insert(article);
 
         ArticleForm updateArticle = new ArticleForm("タイトル2", "内容2", userId);
-        articleRepository.update(updateArticle, articleId);
+        articleRepository.update(updateArticle, articleId, userId);
 
         String sql = "SELECT title FROM articles WHERE id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", articleId);

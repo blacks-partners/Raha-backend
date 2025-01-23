@@ -153,7 +153,7 @@ public class ArticleControllerTest {
         }
 
         @Test
-        @DisplayName("testDelete()にてjwtから取得したuserIdがnullであればケース")
+        @DisplayName("testDelete()にてjwtから取得したuserIdがnullであるケース")
         void testDeleteUserNull() throws Exception {
                 Integer articleId = 1;
                 Integer userId = null;
@@ -173,17 +173,21 @@ public class ArticleControllerTest {
         @DisplayName("testUpdate()の正常系")
         void testUpdate() throws Exception {
                 Integer articleId = 1;
+                Integer userId = 1;
 
                 ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
 
-                doNothing().when(articleService).update(articleForm, articleId);
+                doNothing().when(articleService).update(articleForm, articleId, userId);
 
                 Map<String, Object> articleIdPassMap = new HashMap<>();
                 articleIdPassMap.put("title", "タイトル1");
                 articleIdPassMap.put("content", "内容");
-                articleIdPassMap.put("userId", 1);
 
                 String requestBody = objectMapper.writeValueAsString(articleIdPassMap);
+
+                Authentication authentication = mock(Authentication.class);
+                when(authentication.getPrincipal()).thenReturn(userId);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 mockMvc.perform(
                                 put("/articles/{articleId}", articleId)
@@ -191,24 +195,28 @@ public class ArticleControllerTest {
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNoContent());
 
-                                verify(articleService).update(any(), any());
+                verify(articleService).update(any(), any(), any());
         }
 
         @Test
         @DisplayName("testUpdate()にてarticleIdがnullであるケース")
         void testUpdateUserNull() throws Exception {
-                Integer articleId = null;
+                Integer articleId = 1;
+                Integer userId = null;
 
                 ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
 
-                doNothing().when(articleService).update(articleForm, articleId);
+                doNothing().when(articleService).update(articleForm, articleId, userId);
 
                 Map<String, Object> articleIdPassMap = new HashMap<>();
                 articleIdPassMap.put("title", "タイトル1");
                 articleIdPassMap.put("content", "内容");
-                articleIdPassMap.put("userId", 1);
 
                 String requestBody = objectMapper.writeValueAsString(articleIdPassMap);
+
+                Authentication authentication = mock(Authentication.class);
+                when(authentication.getPrincipal()).thenReturn(userId);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 mockMvc.perform(
                                 put("/articles/{articleId}", articleId)
@@ -216,6 +224,6 @@ public class ArticleControllerTest {
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNoContent());
 
-                                verify(articleService, never()).update(any(), any());
+                verify(articleService, never()).update(any(), any(), any());
         }
 }

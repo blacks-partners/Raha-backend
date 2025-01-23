@@ -136,14 +136,14 @@ public class ArticleServiceTest {
     @DisplayName("testUpdate()の正常系")
     void testUpdate() {
         Integer articleId = 1;
-
+        Integer userId = 1;
         ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
 
-        doNothing().when(articleRepository).update(articleForm, articleId);
+        doNothing().when(articleRepository).update(articleForm, articleId, userId);
 
-        articleService.update(articleForm, articleId);
+        articleService.update(articleForm, articleId, userId);
 
-        verify(articleRepository).update(any(), any());
+        verify(articleRepository).update(any(), any(), any());
     }
 
     @Test
