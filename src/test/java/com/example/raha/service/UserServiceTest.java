@@ -27,7 +27,6 @@ import com.example.raha.repository.UserRepository;
  */
 
 @ExtendWith(MockitoExtension.class)
-@Sql("/TestSql.sql")
 @Transactional
 public class UserServiceTest {
     @Mock
