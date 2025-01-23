@@ -1,6 +1,5 @@
 package com.example.raha.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
 import com.example.raha.form.UpdateUserForm;
@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository repository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Value("${jwt.secret}")
