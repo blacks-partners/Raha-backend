@@ -1,4 +1,4 @@
--- @auther KANAMARU
+-- @auther S.Kanamaru
 
 -- ユーザーテーブル作成
 drop table if exists users cascade;
@@ -20,11 +20,11 @@ drop table if exists articles cascade;
 
 CREATE TABLE articles (
     id serial PRIMARY KEY,
-        title varchar(50) NOT NULL,
+    title varchar(50) NOT NULL,
     content varchar(10000) NOT NULL,
     user_id integer NOT NULL, -- user_idをカラムとして定義し、NOT NULLを設定
-created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -44,7 +44,7 @@ CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE
 
 
 -- ユーザーテーブルにデモ情報の追加
-INSERT INTO users (name,email, password, Introduction)
+INSERT INTO users (name, email, password, introduction)
 VALUES 
 (
     '田中太郎',

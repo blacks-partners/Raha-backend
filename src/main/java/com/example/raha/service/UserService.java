@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
 import com.example.raha.domain.User;
 import com.example.raha.form.RegisterUserForm;
 import com.example.raha.form.UpdateUserForm;
@@ -28,9 +29,6 @@ public class UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-
-    @Value("${jwt.secret}")
-    private String secret;
 
     /**
      * ユーザー情報詳細の取得。

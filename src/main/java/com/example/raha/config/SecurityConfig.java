@@ -15,7 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.example.raha.service.LoginUserDetailsService;
+import com.example.raha.service.SecurityUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +36,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/articles/*").permitAll()
+                .requestMatchers(HttpMethod.GET,"/articles", "/articles/*").permitAll()
                 .anyRequest().authenticated());
 
         // カスタムの認可フィルタをセキュリティフィルタチェーンに追加
@@ -54,7 +54,7 @@ public class SecurityConfig {
 
     // ユーザー情報の取得とパスワードの照合を行う
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(LoginUserDetailsService userService) {
+    public DaoAuthenticationProvider daoAuthenticationProvider(SecurityUserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         // ユーザー詳細サービスを設定（ユーザー情報の取得に使用）
         provider.setUserDetailsService(userService);

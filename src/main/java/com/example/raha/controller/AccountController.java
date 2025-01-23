@@ -19,6 +19,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import com.example.raha.error.invalidAuthenticationException;
 import com.example.raha.form.LoginForm;
+import com.example.raha.service.SecurityUserService;
 
 /**
  * アカウントコントローラー
@@ -28,7 +29,8 @@ import com.example.raha.form.LoginForm;
 @RestController
 @RequiredArgsConstructor
 public class AccountController {
-    private final UserService service;
+    private final UserService userService;
+    private final SecurityUserService securityUserService;
     private final DaoAuthenticationProvider provider;
 
     /**
@@ -43,10 +45,10 @@ public class AccountController {
         try {
             // ユーザーの認証
             provider.authenticate(new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword()));
-            User user = service.loadByEmail(form.getEmail());
+            User user = userService.loadByEmail(form.getEmail());
 
             // JWTトークンの生成
-            HttpHeaders headers = service.createJwtHeader(user.getUserId());
+            HttpHeaders headers = securityUserService.createJwtHeader(user.getUserId());
             Map<String, Integer> response = Map.of("userId", user.getUserId());
             return new ResponseEntity<>(response, headers, HttpStatus.OK);
 
@@ -64,14 +66,14 @@ public class AccountController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Map<String, Integer>> register(@RequestBody RegisterUserForm form) {
-        User registeredUser = service.findByEmail(form.getEmail());
+        User registeredUser = userService.findByEmail(form.getEmail());
         if (registeredUser != null) {
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
-        Integer userId = service.register(form);
+        Integer userId = userService.register(form);
 
         // JWTトークンの生成
-        HttpHeaders headers = service.createJwtHeader(userId);
+        HttpHeaders headers = userService.createJwtHeader(userId);
         Map<String, Integer> response = Map.of("userId", userId);
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
