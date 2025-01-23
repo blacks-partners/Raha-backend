@@ -3,14 +3,10 @@ package com.example.raha.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-import java.util.Map;
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -33,14 +29,19 @@ public class CommentRepositoryTest {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private CommentForm createCommentForm() {
+        String sqlArticleId = "SELECT id FROM articles LIMIT 1";
+        Integer articleId = jdbcTemplate.queryForObject(sqlArticleId, new MapSqlParameterSource(), Integer.class);
+        String sqlUserId = "SELECT id FROM users LIMIT 1";
+        Integer userId = jdbcTemplate.queryForObject(sqlUserId, new MapSqlParameterSource(), Integer.class);
         CommentForm comment = new CommentForm();
-        comment.setArticleId(10);
-        comment.setUserId(10);
+        comment.setArticleId(articleId);
+        comment.setUserId(userId);
         comment.setContent("コメントテスト");
         return comment;
     }
     
     @Test
+    @DisplayName("コメントを挿入する")
     void testInsert() {
         CommentForm comment = createCommentForm();
         Integer commentId = commentRepository.insert(comment);
@@ -50,6 +51,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @DisplayName("コメントを更新する")
     void testUpdate() {
         CommentForm comment = createCommentForm();
         Integer commentId = commentRepository.insert(comment);
@@ -64,6 +66,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @DisplayName("コメントを削除する")
     void testDelete() {
         CommentForm comment = createCommentForm();
         Integer commentId = commentRepository.insert(comment);
@@ -73,6 +76,6 @@ public class CommentRepositoryTest {
         String sql = "SELECT COUNT(*) FROM comments WHERE id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", commentId);
         Integer count = jdbcTemplate.queryForObject(sql, params, Integer.class);
-        assertTrue(count == 0);
+        assertEquals(0, count);
     }
 }

@@ -97,7 +97,6 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
         articleService.update(article, articleId);
-
     }
 
     /**

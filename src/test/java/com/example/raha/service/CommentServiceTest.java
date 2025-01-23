@@ -3,10 +3,11 @@ package com.example.raha.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,9 +39,10 @@ public class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("コメントを挿入する")
     void testInsert() {
         CommentForm comment = createCommentForm();
-        when(commentRepository.insert(comment)).thenReturn(1);
+        doReturn(1).when(commentRepository).insert(comment);
 
         Integer commentId = commentService.insert(comment);
 
@@ -50,6 +52,7 @@ public class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("コメントを更新する")
     void testUpdate() {
         CommentForm comment = createCommentForm();
         comment.setCommentId(1);
@@ -63,6 +66,7 @@ public class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("コメントを削除する")
     void testDelete() {
         Integer commentId = 1;
         Integer userId = 1;

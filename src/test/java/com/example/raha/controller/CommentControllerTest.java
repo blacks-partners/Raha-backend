@@ -6,14 +6,17 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -50,6 +54,7 @@ public class CommentControllerTest {
     private Authentication authentication;
 
     @Test
+    @DisplayName("コメントを挿入する")
     void testInsertComment() throws Exception {
         Integer commentId = 1;
         doReturn(commentId).when(commentService).insert(any(CommentForm.class));
@@ -71,9 +76,11 @@ public class CommentControllerTest {
     }
 
     @Test
+    @DisplayName("コメントを更新する（正常系）")
     void testUpdateComment() throws Exception {
         Integer commentId = 1;
         Integer userId = 1;
+
         doNothing().when(commentService).update(any(CommentForm.class), eq(commentId), eq(userId));
 
         Map<String, Object> data = new HashMap<>();
@@ -81,16 +88,76 @@ public class CommentControllerTest {
 
         String requestBody = objectMapper.writeValueAsString(data);
 
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         mockMvc.perform(MockMvcRequestBuilders.put("/comments/{commentId}", commentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isNoContent());
 
-        verify(commentService, times(1)).update(any(CommentForm.class), eq(commentId), eq(Integer.valueOf(userId)));
+        verify(commentService, times(1)).update(any(CommentForm.class), eq(commentId), eq(userId));
     }
 
     @Test
-    void testDeleteComment() throws Exception {
+    @DisplayName("コメントを更新する(異常系: ユーザIDがnull)")
+    void testUpdateComment_NullUserId() throws Exception {
+        Integer commentId = 1;
+        Integer userId = null;
 
+        doNothing().when(commentService).update(any(CommentForm.class), eq(commentId), eq(userId));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("content", "change content");
+
+        String requestBody = objectMapper.writeValueAsString(data);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/comments/{commentId}", commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isNoContent());
+
+        verify(commentService, never()).update(any(CommentForm.class), eq(commentId), eq(userId));
+    }
+
+    @Test
+    @DisplayName("コメントを削除する（正常系）")
+    void testDeleteComment() throws Exception {
+        Integer commentId = 1;
+        Integer userId = 1;
+
+        doNothing().when(commentService).delete(eq(commentId), eq(userId));
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comments/{commentId}", commentId))
+                .andExpect(status().isNoContent());
+
+        verify(commentService, times(1)).delete(eq(commentId), eq(userId));
+    }
+
+    @Test
+    @DisplayName("コメントを削除する(異常系: ユーザIDがnull)")
+    void testDeleteComment_NullUserId() throws Exception {
+        Integer commentId = 1;
+        Integer userId = null;
+
+        doNothing().when(commentService).delete(eq(commentId), eq(userId));
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comments/{commentId}", commentId))
+                .andExpect(status().isNoContent());
+
+        verify(commentService, never()).delete(eq(commentId), eq(userId));
     }
 }
