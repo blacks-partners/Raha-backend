@@ -90,13 +90,17 @@ public class ArticleController {
     /**
      * 記事内容の更新
      * 
-     * @param article   更新する気情報
+     * @param article   更新する記事情報
      * @param articleId 対象の記事ID
      */
     @PutMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
-        articleService.update(article, articleId);
+        Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
+            return;
+        }
+        articleService.update(article, articleId, userId);
 
     }
 
