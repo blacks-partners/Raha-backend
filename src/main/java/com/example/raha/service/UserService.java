@@ -30,6 +30,9 @@ public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${jwt.secret}")
+    private String secret;
+
     /**
      * ユーザー情報詳細の取得。
      * @param id ユーザーID
