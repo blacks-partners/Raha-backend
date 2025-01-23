@@ -76,7 +76,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("コメントを更新する（正常系）")
+    @DisplayName("コメントを更新する（userId = 1）")
     void testUpdateComment() throws Exception {
         Integer commentId = 1;
         Integer userId = 1;
@@ -101,7 +101,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("コメントを更新する(異常系: ユーザIDがnull)")
+    @DisplayName("コメントを更新する(userId = null)")
     void testUpdateComment_NullUserId() throws Exception {
         Integer commentId = 1;
         Integer userId = null;
@@ -126,7 +126,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("コメントを削除する（正常系）")
+    @DisplayName("コメントを削除する（userId = 1）")
     void testDeleteComment() throws Exception {
         Integer commentId = 1;
         Integer userId = 1;
@@ -144,7 +144,7 @@ public class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("コメントを削除する(異常系: ユーザIDがnull)")
+    @DisplayName("コメントを削除する(userId = null)")
     void testDeleteComment_NullUserId() throws Exception {
         Integer commentId = 1;
         Integer userId = null;
