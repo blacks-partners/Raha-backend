@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import org.springframework.http.MediaType;
@@ -167,7 +170,52 @@ public class ArticleControllerTest {
         }
 
         @Test
-        void testUpdate() {
+        @DisplayName("testUpdate()の正常系")
+        void testUpdate() throws Exception {
+                Integer articleId = 1;
 
+                ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
+
+                doNothing().when(articleService).update(articleForm, articleId);
+
+                Map<String, Object> articleIdPassMap = new HashMap<>();
+                articleIdPassMap.put("title", "タイトル1");
+                articleIdPassMap.put("content", "内容");
+                articleIdPassMap.put("userId", 1);
+
+                String requestBody = objectMapper.writeValueAsString(articleIdPassMap);
+
+                mockMvc.perform(
+                                put("/articles/{articleId}", articleId)
+                                                .content(requestBody)
+                                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isNoContent());
+
+                                verify(articleService).update(any(), any());
+        }
+
+        @Test
+        @DisplayName("testUpdate()にてarticleIdがnullであるケース")
+        void testUpdateUserNull() throws Exception {
+                Integer articleId = null;
+
+                ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
+
+                doNothing().when(articleService).update(articleForm, articleId);
+
+                Map<String, Object> articleIdPassMap = new HashMap<>();
+                articleIdPassMap.put("title", "タイトル1");
+                articleIdPassMap.put("content", "内容");
+                articleIdPassMap.put("userId", 1);
+
+                String requestBody = objectMapper.writeValueAsString(articleIdPassMap);
+
+                mockMvc.perform(
+                                put("/articles/{articleId}", articleId)
+                                                .content(requestBody)
+                                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isNoContent());
+
+                                verify(articleService, never()).update(any(), any());
         }
 }

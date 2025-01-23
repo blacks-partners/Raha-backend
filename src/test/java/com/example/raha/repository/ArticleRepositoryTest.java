@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,9 @@ public class ArticleRepositoryTest {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final static RowMapper<Integer> MAX_ROW_MAPPER = (rs, i) -> {
         return rs.getInt("max");
@@ -108,16 +113,42 @@ public class ArticleRepositoryTest {
 
     }
 
-    // @Test
-    // @DisplayName("delete()正常系")
-    // void testDelete() {
+    @Test
+    @DisplayName("delete()正常系")
+    void testDelete() {
+        String maxArticleIdSql = "SELECT max(id) FROM articles";
+        Integer articleId = jdbcTemplate.queryForObject(maxArticleIdSql, MAX_ROW_MAPPER);
 
-    // }
+        String maxUserIdIdSql = "SELECT id FROM users";
+        Integer userId = jdbcTemplate.queryForObject(maxUserIdIdSql, USERID_ROW_MAPPER);
+        
 
-    // @Test
-    // @DisplayName("update()正常系")
-    // void testUpdate() {
+        articleRepository.delete(articleId, userId);
 
-    // }
+        Integer maxIdAfterDelete = jdbcTemplate.queryForObject(maxArticleIdSql, MAX_ROW_MAPPER);
+
+        Integer afterArticleId = (articleId != null) ? articleId - 1 : null;
+
+        assertEquals(afterArticleId, maxIdAfterDelete);
+    }
+
+    @Test
+    @DisplayName("update()正常系")
+    void testUpdate() {
+        String userIdSql = "SELECT id FROM users";
+        Integer userId = jdbcTemplate.queryForObject(userIdSql, USERID_ROW_MAPPER);
+
+        ArticleForm article = new ArticleForm("タイトル1", "内容1", userId);
+        Integer articleId = articleRepository.insert(article);
+
+        ArticleForm updateArticle = new ArticleForm("タイトル2", "内容2", userId);
+        articleRepository.update(updateArticle, articleId);
+
+        String sql = "SELECT title FROM articles WHERE id = :id";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", articleId);
+        String updatedArticle = namedParameterJdbcTemplate.queryForObject(sql, params, String.class);
+        assertEquals("タイトル2", updatedArticle);
+
+    }
 
 }
