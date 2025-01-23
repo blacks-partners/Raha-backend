@@ -54,13 +54,12 @@ public class SecurityUserServiceTest {
         user.setCreatedAt(null);
         user.setUpdatedAt(null);
 
+        when(userRepository.loadByEmail(user.getEmail())).thenReturn(user);
+
+        UserDetails userDetails = securityUserService.loadUserByUsername(user.getEmail());
+
         String email = "test@example.com";
-
-        when(userRepository.loadByEmail(email)).thenReturn(user);
-
-        UserDetails userDetails = securityUserService.loadUserByUsername(email);
-
-        assertEquals(user.getEmail(), userDetails.getUsername());
+        assertEquals(email, userDetails.getUsername());
         verify(userRepository, times(1)).loadByEmail(email);
     }
 
