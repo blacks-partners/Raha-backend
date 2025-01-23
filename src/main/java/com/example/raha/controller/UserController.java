@@ -35,6 +35,7 @@ public class UserController {
      * @return user ユーザー
      */
     @GetMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
     public User userDetails(@PathVariable Integer userId) {
         User user = service.load(userId);
         return user;
