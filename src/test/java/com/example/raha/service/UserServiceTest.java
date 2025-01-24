@@ -2,6 +2,8 @@ package com.example.raha.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -37,53 +39,62 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    // @Test
-    // void testCreateJwtHeader() {
+    @Test
+    void testCreateJwtHeader() {
 
-    // }
+    }
 
     @Test
     @DisplayName("User情報を削除する処理をテストする。")
     void testDelete() {
         User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
-        service.delete(user.getUserId());
-        User result = service.load(user.getUserId());
+        doNothing().when(repository).delete(1);
+        doReturn(user).when(repository).load(1);
+        User result = service.load(1);
         assertNull(result);
     }
 
     @Test
     @DisplayName("emailからUser情報（パスワードなし）を取り出すテスト。")
     void testFindByEmail() {
-        User result = service.findByEmail("demo_user@example.com");
-        User user = service.load(1);
-        if(result == null) {
-            assertNull(result);
-        } else {
-            assertEquals(result, user);
-        }
+        User user = new User(1, "taro", "demo_user@example.com", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
+        when(repository.findByEmail("demo_user@example.com")).thenReturn(user);
+        User result = service.findByEmail(user.getEmail());
+        assertEquals(result, user);
+    }
+
+    @Test
+    @DisplayName("emailからUser情報（パスワードなし）を取り出した時nullだった時のテスト。")
+    void testNullFindByEmail() {
+        doReturn(null).when(repository).findByEmail("a@a");
+        User result = service.findByEmail(null);
+        assertNull(result);
     }
 
     @Test
     @DisplayName("idからUser情報を取り出すテスト。")
     void testLoad() {
-        User user = service.load(1);
-        if(user == null ){
-            assertNull(user);
-        } else {
-            assertEquals(user.getName(), "田中太郎");
-        }
+        User user = new User(1, "taro", "demo_user@example.com", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
+        doReturn(user).when(repository).load(1);
+        User result = service.load(1);
+        assertEquals(result.getName(), "taro");
     }
 
     @Test
     @DisplayName("emailからUser情報（パスワードあり）を取り出すテスト。")
     void testLoadByEmail() {
-        User user = service.loadByEmail("demo_user@example.com");
-        User result = service.load(1);
-        if (user == null ){
-            assertNull(user);
-        } else {
-            assertEquals(user, result);
-        }
+        User user = new User(1, "taro", "demo_user@example.com", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
+        doReturn(user).when(repository).loadByEmail("demo_user@example.com");
+        User result = service.loadByEmail("demo_user@example.com");
+        assertEquals(user, result);
+    }
+
+    @Test
+    @DisplayName("emailからUser情報（パスワードあり）を取り出した時nullの時テスト。")
+    void testNullLoadByEmail() {
+        doNothing().when(repository).loadByEmail(null);
+        User result = service.loadByEmail(null);
+        assertNull(result);
     }
 
     @Test
