@@ -30,23 +30,6 @@ public class ArticleRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private static final RowMapper<Article> ARTICLE_ROWMAPPER = (rs, i) -> {
-        Article article = new Article();
-        article.setArticleId(rs.getInt("a_id"));
-        article.setTitle(rs.getString("a_title"));
-        article.setContent(rs.getString("a_content"));
-        article.setCreatedAt(rs.getTimestamp("a_created_at").toLocalDateTime());
-        article.setUpdatedAt(rs.getTimestamp("a_updated_at").toLocalDateTime());
-        article.setCommentList(null);
-
-        User user = new User();
-        user.setUserId(rs.getInt("u_id"));
-        user.setName(rs.getString("u_name"));
-
-        article.setUser(user);
-        return article;
-    };
-
     private static final RowMapper<Article> USER_ARTICLE_ROWMAPPER = (rs, i) -> {
         Article article = new Article();
         article.setArticleId(rs.getInt("a_id"));

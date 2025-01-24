@@ -67,6 +67,23 @@ public class ArticleRepositoryTest {
     }
 
     @Test
+    @DisplayName("articleDetails()コメントなし")
+    void testArticleDetailsCommentNull() {
+        String userIdSql = "SELECT max(id) FROM users";
+        Integer maxUserId = jdbcTemplate.queryForObject(userIdSql, MAX_ROW_MAPPER);
+
+        ArticleForm articleForm = new ArticleForm("テストタイトル", "テスト内容", maxUserId);
+        articleRepository.insert(articleForm);
+
+        String articleIdSql = "SELECT max(id) FROM articles";
+        Integer maxArticleId = jdbcTemplate.queryForObject(articleIdSql, MAX_ROW_MAPPER);
+
+        Article articleTest = articleRepository.articleDetails(maxArticleId);
+        assertThat(articleTest.getTitle()).isEqualTo("テストタイトル");
+
+    }
+
+    @Test
     @DisplayName("articleDetails()にて該当の記事がない場合")
     void testArticleDetailsNothing() {
 
@@ -121,7 +138,6 @@ public class ArticleRepositoryTest {
 
         String maxUserIdIdSql = "SELECT id FROM users";
         Integer userId = jdbcTemplate.queryForObject(maxUserIdIdSql, USERID_ROW_MAPPER);
-        
 
         articleRepository.delete(articleId, userId);
 
