@@ -36,7 +36,7 @@ public class ArticleServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
         LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
 
-        User user = new User(1, "カナマル", "gorousora@icloud.com", null, null, time1, time1);
+        User user = new User(1, "カナマル", "gorou@example.com", null, null, time1, time1);
 
         Article article1 = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
         Article article2 = new Article(1, "タイトル2", "内容2", user, null, time2, time2);
@@ -63,7 +63,7 @@ public class ArticleServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
         LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
 
-        User user = new User(1, "カナマル", "gorousora@icloud.com", null, null, time1, time1);
+        User user = new User(1, "カナマル", "gorou@example.com", null, null, time1, time1);
 
         Article article = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
 
@@ -83,13 +83,6 @@ public class ArticleServiceTest {
     @DisplayName("testInsert()の正常系")
     void testInsert() {
         ArticleForm articleForm = new ArticleForm("タイトル1", "内容1", 1);
-
-        LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
-        LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
-
-        User user = new User(1, "カナマル", "gorousora@icloud.com", null, null, time1, time1);
-
-        Article article = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
 
         Integer articleId = 1;
 
@@ -112,7 +105,7 @@ public class ArticleServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
         LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
 
-        User user = new User(userId, "カナマル", "gorousora@icloud.com", null, null, time1, time1);
+        User user = new User(userId, "カナマル", "gorou@example.com", null, null, time1, time1);
 
         Article article1 = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
         Article article2 = new Article(1, "タイトル2", "内容2", user, null, time2, time2);

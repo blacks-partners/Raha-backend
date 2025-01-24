@@ -58,7 +58,7 @@ public class ArticleControllerTest {
                 LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
                 LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
 
-                User user = new User(1, "カナマル", "gorousora@icloud.com", null, null, time1, time1);
+                User user = new User(1, "カナマル", "gorou@example.com", null, null, time1, time1);
 
                 Article article1 = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
                 Article article2 = new Article(1, "タイトル2", "内容2", user, null, time2, time2);
@@ -67,18 +67,15 @@ public class ArticleControllerTest {
                 articleList.add(article1);
                 articleList.add(article2);
 
-                Map<String, Object> data = new HashMap<>();
-
-                String requestBody = objectMapper.writeValueAsString(data);
-
                 doReturn(articleList).when(articleService).findAll();
 
                 mockMvc.perform(
                                 get("/articles")
-                                                .content(requestBody)
+
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$[0].title").value("タイトル1"));
+                verify(articleService).findAll();
         }
 
         @Test
@@ -89,23 +86,18 @@ public class ArticleControllerTest {
                 LocalDateTime time1 = LocalDateTime.of(2020, 1, 1, 1, 1, 1);
                 LocalDateTime time2 = LocalDateTime.of(2021, 1, 1, 1, 1, 1);
 
-                User user = new User(1, "カナマル", "gorousora@icloud.com", null, null, time1,
-                                time1);
+                User user = new User(1, "カナマル", "gorou@example.com", null, null, time1, time1);
 
                 Article article = new Article(1, "タイトル1", "内容1", user, null, time2, time2);
 
                 doReturn(article).when(articleService).articleDetails(articleId);
-                Map<String, Article> articleIdPassMap = new HashMap<>();
-                articleIdPassMap.put("Article", article);
-
-                String requestBody = objectMapper.writeValueAsString(articleIdPassMap);
 
                 mockMvc.perform(
                                 get("/articles/{articleId}", articleId)
-                                                .content(requestBody)
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.title").value("タイトル1"));
+                verify(articleService).articleDetails(any());
 
         }
 
@@ -113,8 +105,6 @@ public class ArticleControllerTest {
         @DisplayName("testInsert()の正常系")
         void testInsert() throws Exception {
                 Integer insertArticleId = 10;
-
-                ArticleForm articleForm = new ArticleForm("タイトル1", "内容2", 1);
 
                 doReturn(insertArticleId).when(articleService).insert(any(ArticleForm.class));
 
@@ -132,6 +122,7 @@ public class ArticleControllerTest {
                                 .andExpect(status().isCreated())
                                 .andExpect(header().string("Location", "http://localhost/articles/10"))
                                 .andExpect(jsonPath("$.articleId").value("10"));
+                verify(articleService).insert(any());
 
         }
 
@@ -150,6 +141,7 @@ public class ArticleControllerTest {
                                 delete("/articles/{articleId}", articleId)
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNoContent());
+                verify(articleService).delete(any(), any());
         }
 
         @Test
@@ -167,6 +159,7 @@ public class ArticleControllerTest {
                                 delete("/articles/{articleId}", articleId)
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNoContent());
+
         }
 
         @Test

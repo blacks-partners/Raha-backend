@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -23,7 +22,6 @@ import com.example.raha.form.ArticleForm;
 @SpringBootTest
 @Transactional
 @Sql("TestSql.sql")
-@Import(ArticleRepository.class)
 public class ArticleRepositoryTest {
 
     @Autowired
