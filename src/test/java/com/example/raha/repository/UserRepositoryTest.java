@@ -3,10 +3,13 @@ package com.example.raha.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,13 @@ public class UserRepositoryTest {
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private static final RowMapper<Integer> MAX_USERID_ROWMAPPER = (rs, i) -> {
+        Integer userId = rs.getInt("id");
+        return userId;
+    };
 
     @Test
     @DisplayName("User情報が削除できているか確認するテスト。")
@@ -74,17 +84,21 @@ public class UserRepositoryTest {
             assertEquals(result.getEmail(), "demo_user@example.com");
         }
     }
+    @Test
+    @DisplayName("loadByEmailがnullの時用のテスト。")
+    void testNullLoadByEmail() {
+        User user = repository.loadByEmail(null);
+        assertNull(user);
+    }
 
     @Test
     @DisplayName("emailからUser（パスワードあり）が取得できているかのテスト。")
     void testLoadByEmail() {
-        User result = repository.findByEmail("demo_user@example.com");
-        User user = repository.load(1);
-        if(result == null) {
-            assertNull(result);
-        } else {
-            assertEquals(result.getName(), user.getName());
-        }
+        User result = repository.loadByEmail("demo_user4@example.com");
+        String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1;";
+        Integer maxUserId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        User user = repository.load(maxUserId);
+        assertEquals(result.getName(), user.getName());
     }
 
     @Test
