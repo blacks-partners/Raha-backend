@@ -65,6 +65,9 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
         Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
+            return;
+        }
         commentService.update(comment, commentId, userId);
     }
     /**
