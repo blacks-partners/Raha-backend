@@ -30,7 +30,7 @@ docker ps
 ```
 - `raha-backend-container`と`raha-db-container`が起動していればOK。
 - 起動していない場合は、もう一回 `docker compose up -d` を実施。
-
+- それでもうまく行かない場合は、`docker compose down -v`をしてから起動のコマンドを実行してください。
 ---
 ### Docker操作の参考文献
 https://qiita.com/okyk/items/a374ddb3f853d1688820
