@@ -159,7 +159,7 @@ public class ArticleControllerTest {
                                 delete("/articles/{articleId}", articleId)
                                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNoContent());
-
+                verify(articleService, never()).delete(any(), any());
         }
 
         @Test
