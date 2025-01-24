@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.raha.domain.User;
 import com.example.raha.error.invalidAuthenticationException;
 import com.example.raha.form.LoginForm;
+import com.example.raha.service.SecurityUserService;
 import com.example.raha.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class AccountController {
-    private final UserService service;
-    private final DaoAuthenticationProvider provider;
+    private final UserService userService;
 
+    private final SecurityUserService securityUserService;
+    private final DaoAuthenticationProvider provider;
 
     /**
      * ログイン
@@ -43,10 +45,10 @@ public class AccountController {
         try {
             // ユーザーの認証
             provider.authenticate(new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword()));
-            User user = service.loadByEmail(form.getEmail());
+            User user = userService.loadByEmail(form.getEmail());
 
             // JWTトークンの生成
-            HttpHeaders headers = service.createJwtHeader(user.getUserId());
+            HttpHeaders headers = securityUserService.createJwtHeader(user.getUserId());
             Map<String, Integer> response = Map.of("userId", user.getUserId());
             return new ResponseEntity<>(response, headers, HttpStatus.OK);
 
