@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -48,10 +50,9 @@ public class UserServiceTest {
     @DisplayName("User情報を削除する処理をテストする。")
     void testDelete() {
         User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
-        doNothing().when(repository).delete(1);
-        doReturn(user).when(repository).load(1);
-        User result = service.load(1);
-        assertNull(result);
+        doNothing().when(repository).delete(user.getUserId());
+        service.delete(user.getUserId());
+        verify(repository, times(1)).delete(user.getUserId());
     }
 
     @Test
@@ -61,14 +62,16 @@ public class UserServiceTest {
         when(repository.findByEmail("demo_user@example.com")).thenReturn(user);
         User result = service.findByEmail(user.getEmail());
         assertEquals(result, user);
+        verify(repository, times(1)).findByEmail("demo_user@example.com");
     }
 
     @Test
     @DisplayName("emailからUser情報（パスワードなし）を取り出した時nullだった時のテスト。")
     void testNullFindByEmail() {
-        doReturn(null).when(repository).findByEmail("a@a");
-        User result = service.findByEmail(null);
+        doReturn(null).when(repository).findByEmail("demo_user@example.com");
+        User result = service.findByEmail("demo_user@example.com");
         assertNull(result);
+        verify(repository, times(1)).findByEmail("demo_user@example.com");
     }
 
     @Test
@@ -78,6 +81,7 @@ public class UserServiceTest {
         doReturn(user).when(repository).load(1);
         User result = service.load(1);
         assertEquals(result.getName(), "taro");
+        verify(repository, times(1)).load(1);
     }
 
     @Test
@@ -87,14 +91,16 @@ public class UserServiceTest {
         doReturn(user).when(repository).loadByEmail("demo_user@example.com");
         User result = service.loadByEmail("demo_user@example.com");
         assertEquals(user, result);
+        verify(repository, times(1)).loadByEmail("demo_user@example.com");
     }
 
     @Test
     @DisplayName("emailからUser情報（パスワードあり）を取り出した時nullの時テスト。")
     void testNullLoadByEmail() {
-        doNothing().when(repository).loadByEmail(null);
-        User result = service.loadByEmail(null);
+        doReturn(null).when(repository).loadByEmail("demo_user@example.com");
+        User result = service.loadByEmail("demo_user@example.com");
         assertNull(result);
+        verify(repository, times(1)).loadByEmail("demo_user@example.com");
     }
 
     @Test
@@ -102,25 +108,29 @@ public class UserServiceTest {
     void testRegister() {
         RegisterUserForm form = new RegisterUserForm("yuki", "b@b", "password");
         Integer id = 1;
-        when(repository.insert(form)).thenReturn(id);
+        doReturn(id).when(repository).insert(form);
         Integer resultId = service.register(form);
-        if (resultId == null){
-            assertNull(resultId);
-        } else {
-            assertEquals(resultId, id);
-        }
+        assertEquals(resultId, id);
+        verify(repository, times(1)).insert(form);
+    }
+
+    @Test
+    @DisplayName("User登録が失敗を確認するテスト。")
+    void testNullRegister() {
+        RegisterUserForm form = new RegisterUserForm("yuki", "b@b", "password");
+        doReturn(null).when(repository).insert(form);
+        Integer resultId = service.register(form);
+        assertNull(resultId);
+        verify(repository, times(1)).insert(form);
     }
 
     @Test
     @DisplayName("ユーザー更新が行えているかのテスト。")
     void testUpdate() {
+        User user = new User(1, "hayato", "demo_user@example.com", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
         UpdateUserForm form = new UpdateUserForm("taro", "taro@taro", "taroです。");
-        service.update(1, form);
-        User result = service.load(1);
-        if (result == null) {
-            assertNull(result);
-        } else {
-            assertEquals(result.getName(), "taro");
-        }
+        doNothing().when(repository).update(user.getUserId(), form);
+        service.update(user.getUserId(), form);
+        verify(repository, times(1)).update(user.getUserId(), form);
     }
 }

@@ -1,6 +1,9 @@
 package com.example.raha.controller;
 
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -50,12 +53,13 @@ public class UserControllerTest {
     void testDelete() throws Exception {
         User user = new User(1, "taro", "taro@taro", "password", "hello", LocalDateTime.now(), LocalDateTime.now());
         Integer userId = user.getUserId();
-        Mockito.when(service.load(userId)).thenReturn(user);
+        doNothing().when(service).delete(userId);
 
         mockMvc.perform(
                 delete("/users/{userId}", 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
+        verify(service, times(1)).delete(userId);
     }
 
     @Test
@@ -70,9 +74,8 @@ public class UserControllerTest {
         Map<String, Object> data = new HashMap<>();
         data.put("name", "keta");
         data.put("email", "keta@keta");
-        data.put("introduction", "password");
+        data.put("introduction", "ketaです。");
         String requestBody = objectMapper.writeValueAsString(data);
-
         mockMvc.perform(
                 put("/users/{userId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -80,6 +83,7 @@ public class UserControllerTest {
                         )
                 .andExpect(status().isNoContent())
                 ;
+        verify(service, times(1)).update(userId, form);
     }
 
     @Test
@@ -95,8 +99,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(7))
                 .andExpect(jsonPath("$.name").value("taro"))
-
         ;
-
+        verify(service, times(1)).load(userId);
     }
 }
