@@ -54,12 +54,12 @@ public class UserServiceTest {
     @Test
     @DisplayName("emailからUser情報（パスワードなし）を取り出すテスト。")
     void testFindByEmail() {
-        User user = service.findByEmail("demo_user@example.com");
-        User result = service.load(1);
-        if(user == null) {
-            assertNull(user);
+        User result = service.findByEmail("demo_user@example.com");
+        User user = service.load(1);
+        if(result == null) {
+            assertNull(result);
         } else {
-            assertEquals(user, result);
+            assertEquals(result, user);
         }
     }
 
