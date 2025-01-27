@@ -2,6 +2,7 @@ package com.example.raha.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -78,5 +79,19 @@ public class AccountController {
         Map<String, Integer> response = Map.of("userId", userId);
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+    /**
+     * メール重複確認をする。
+     * 
+     * @param RegisterUserForm
+     */
+    @GetMapping("/check-email")
+    @ResponseStatus(HttpStatus.OK)
+    public void checkEmail(@RequestBody RegisterUserForm form) {
+        User findByEmail = userService.findByEmail(form.getEmail());
+        if (findByEmail != null) {
+            throw new ConflictException("入力されたメールアドレスは既に登録されています");
+        }
     }
 }
