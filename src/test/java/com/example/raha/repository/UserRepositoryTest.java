@@ -33,17 +33,6 @@ public class UserRepositoryTest {
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-    private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
-        User user = new User();
-        user.setUserId(rs.getInt("id"));
-        user.setName(rs.getString("name"));
-        user.setEmail(rs.getString("email"));
-        user.setIntroduction(rs.getString("introduction"));
-        user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
-        return user;
-    };
-
     private static final RowMapper<Integer> MAX_USERID_ROWMAPPER = (rs, i) -> {
         Integer userId = rs.getInt("id");
         return userId;
