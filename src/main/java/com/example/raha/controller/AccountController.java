@@ -85,7 +85,7 @@ public class AccountController {
     /**
      * メール重複確認をする。
      * 
-     * @param RegisterUserForm
+     * @param CheckEmailForm
      */
     @GetMapping("/check-email")
     @ResponseStatus(HttpStatus.OK)
