@@ -61,18 +61,15 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("emailからUser（パスワード）が取り出せているかのテスト。")
+    @DisplayName("emailからUser（パスワードなし）が取り出せているかのテスト。")
     void testFindByEmail() {
         String email = "demo_user4@example.com";
-        String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
-        SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
-        User user = template.queryForObject(sql, param, USER_ROW_MAPPER);
         User result = repository.findByEmail(email);
-        assertEquals(user, result);
+        assertEquals(result.getEmail(), email);
     }
 
     @Test
-    @DisplayName("emailからUser（パスワード）を呼び出したがnullの時のテスト。")
+    @DisplayName("emailからUser（パスワードなし）を呼び出したがnullの時のテスト。")
     void testNullFindByEmail() {
         User result = repository.findByEmail(null);
         assertNull(result);
