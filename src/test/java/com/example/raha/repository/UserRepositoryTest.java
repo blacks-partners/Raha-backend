@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -32,8 +31,6 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository repository;
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
     private NamedParameterJdbcTemplate template;
 
     private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
@@ -56,7 +53,8 @@ public class UserRepositoryTest {
     @DisplayName("User情報が削除できているか確認するテスト。")
     void testDelete() {
         String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1;";
-        Integer maxUserId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        SqlParameterSource param = new MapSqlParameterSource();
+        Integer maxUserId = template.queryForObject(sql, param,  MAX_USERID_ROWMAPPER);
         repository.delete(maxUserId);
         User result = repository.load(maxUserId);
         assertNull(result);
@@ -93,7 +91,8 @@ public class UserRepositoryTest {
     @DisplayName("idのUserが呼び出せているかのテスト。")
     void testLoad() {
         String sql = "SELECT id FROM users ORDER BY id ASC LIMIT 1;";
-        Integer userId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        SqlParameterSource param = new MapSqlParameterSource();
+        Integer userId = template.queryForObject(sql, param, MAX_USERID_ROWMAPPER);
         User result = repository.load(userId);
         assertEquals(result.getEmail(), "demo_user4@example.com");
     }
@@ -110,7 +109,8 @@ public class UserRepositoryTest {
     void testLoadByEmail() {
         User result = repository.loadByEmail("demo_user4@example.com");
         String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1;";
-        Integer maxUserId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        SqlParameterSource param = new MapSqlParameterSource();
+        Integer maxUserId = template.queryForObject(sql, param, MAX_USERID_ROWMAPPER);
         User user = repository.load(maxUserId);
         assertEquals(result.getName(), user.getName());
     }
@@ -127,7 +127,8 @@ public class UserRepositoryTest {
     void testUpdate() {
         UpdateUserForm form = new UpdateUserForm("taro", "taro@taro", "taroです。");
         String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1";
-        Integer userId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        SqlParameterSource param = new MapSqlParameterSource();
+        Integer userId = template.queryForObject(sql, param, MAX_USERID_ROWMAPPER);
 
         repository.update(userId, form);
         User user = repository.load(userId);
