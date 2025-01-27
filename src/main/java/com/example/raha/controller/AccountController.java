@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import com.example.raha.error.invalidAuthenticationException;
+import com.example.raha.form.CheckEmailForm;
 import com.example.raha.form.LoginForm;
 
 import com.example.raha.service.SecurityUserService;
@@ -88,7 +89,7 @@ public class AccountController {
      */
     @GetMapping("/check-email")
     @ResponseStatus(HttpStatus.OK)
-    public void checkEmail(@RequestBody RegisterUserForm form) {
+    public void checkEmail(@RequestBody CheckEmailForm form) {
         User findByEmail = userService.findByEmail(form.getEmail());
         if (findByEmail != null) {
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
