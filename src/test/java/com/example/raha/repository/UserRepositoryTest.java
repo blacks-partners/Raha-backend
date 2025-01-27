@@ -3,15 +3,15 @@ package com.example.raha.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +66,7 @@ public class UserRepositoryTest {
     @DisplayName("emailからUser（パスワード）が取り出せているかのテスト。")
     void testFindByEmail() {
         String email = "demo_user4@example.com";
-        String sql = "SELECT * FROM users WHERE email = :email;";
+        String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE email = :email;";
         SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
         User user = template.queryForObject(sql, param, USER_ROW_MAPPER);
         User result = repository.findByEmail(email);
@@ -76,43 +76,32 @@ public class UserRepositoryTest {
     @Test
     @DisplayName("emailからUser（パスワード）を呼び出したがnullの時のテスト。")
     void testNullFindByEmail() {
-        String email = null;
-        User result = repository.findByEmail(email);
+        User result = repository.findByEmail(null);
         assertNull(result);
     }
 
     @Test
-    @DisplayName("UserFormの情報から登録処理ができているかのテスト。")
+    @DisplayName("RegisterUserFormの情報から登録処理ができているかのテスト。")
     void testInsert() {
         RegisterUserForm form = new RegisterUserForm("taro", "taro@taro", "taro");
-        String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1;";
         Integer userId = repository.insert(form);
-        Integer maxUserId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
-        assertEquals(userId, maxUserId);
-    }
-
-    @Test
-    @DisplayName("UserFormの情報から登録処理ができているかのテスト。")
-    void testNullInsert() {
-        RegisterUserForm form = new RegisterUserForm("taro", "taro@taro", "taro");
-        String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1;";
-        Integer maxUserId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
-        repository.insert(form);
-        User result = repository.load(maxUserId);
-        assertEquals(result.getUserId(), maxUserId);
+        User user = repository.load(userId);
+        assertEquals(user.getName(), "taro");
     }
 
     @Test
     @DisplayName("idのUserが呼び出せているかのテスト。")
     void testLoad() {
-        User result = repository.load(1);
-        assertEquals(result.getEmail(), "demo_user@example.com");
+        String sql = "SELECT id FROM users ORDER BY id ASC LIMIT 1;";
+        Integer userId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+        User result = repository.load(userId);
+        assertEquals(result.getEmail(), "demo_user4@example.com");
     }
 
     @Test
     @DisplayName("idのUserがNullの時のテスト。")
     void testNullLoad() {
-        User result = repository.load(1);
+        User result = repository.load(null);
         assertNull(result);
     }
 
@@ -137,19 +126,13 @@ public class UserRepositoryTest {
     @DisplayName("User情報の更新処理が実行できているかのテスト。")
     void testUpdate() {
         UpdateUserForm form = new UpdateUserForm("taro", "taro@taro", "taroです。");
-        Integer id = 1;
-        repository.update(id, form);
-        User result = repository.load(id);
-        assertEquals(result.getName(), "taro");
+        String sql = "SELECT id FROM users ORDER BY id DESC LIMIT 1";
+        Integer userId = jdbcTemplate.queryForObject(sql, MAX_USERID_ROWMAPPER);
+
+        repository.update(userId, form);
+        User user = repository.load(userId);
+
+        assertEquals(user.getName(), "taro");
     }
 
-    @Test
-    @DisplayName("User情報の更新処理がnullの時ののテスト。")
-    void testNullUpdate() {
-        UpdateUserForm form = new UpdateUserForm("taro", "taro@taro", "taroです。");
-        Integer id = 1;
-        repository.update(id, form);
-        User result = repository.load(id);
-        assertNull(result);
-    }
 }
