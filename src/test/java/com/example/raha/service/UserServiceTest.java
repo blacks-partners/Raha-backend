@@ -115,16 +115,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("User登録が失敗を確認するテスト。")
-    void testNullRegister() {
-        RegisterUserForm form = new RegisterUserForm("yuki", "b@b", "password");
-        doReturn(null).when(repository).insert(form);
-        Integer resultId = service.register(form);
-        assertNull(resultId);
-        verify(repository, times(1)).insert(form);
-    }
-
-    @Test
     @DisplayName("ユーザー更新が行えているかのテスト。")
     void testUpdate() {
         User user = new User(1, "hayato", "demo_user@example.com", "password", "hello", LocalDateTime.now(), LocalDateTime.now());

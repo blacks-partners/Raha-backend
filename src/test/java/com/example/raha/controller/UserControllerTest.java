@@ -55,8 +55,7 @@ public class UserControllerTest {
         doNothing().when(service).delete(userId);
 
         mockMvc.perform(
-                delete("/users/{userId}", 1)
-                        .accept(MediaType.APPLICATION_JSON))
+                delete("/users/{userId}", 1))
                 .andExpect(status().isNoContent());
         verify(service, times(1)).delete(userId);
     }
