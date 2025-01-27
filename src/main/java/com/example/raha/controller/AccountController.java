@@ -19,7 +19,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import com.example.raha.error.invalidAuthenticationException;
 import com.example.raha.form.LoginForm;
-
 import com.example.raha.service.SecurityUserService;
 
 /**
