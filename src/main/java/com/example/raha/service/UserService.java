@@ -62,9 +62,6 @@ public class UserService {
      * @return user ユーザー
      */
     public User findByEmail(String email){
-        if(email == null){
-            return null;
-        }
         User user = repository.findByEmail(email);
         return user;
     }
