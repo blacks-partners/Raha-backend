@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-RahaApplication<raha>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.raha.RahaApplication",
+      "projectName": "raha",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
