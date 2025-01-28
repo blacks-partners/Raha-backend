@@ -15,8 +15,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.raha.domain.User;
 import com.example.raha.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * SecurityConfigクラスで使用するユーザーサービス
  * 
@@ -24,12 +22,14 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class SecurityUserService implements UserDetailsService {
     private final UserRepository repository;
+    private final String secret;
 
-    @Value("${jwt.secret}")
-    private String secret;
+    public SecurityUserService(@Value("${jwt.secret}") String secret, UserRepository repository) {
+        this.repository = repository;
+        this.secret = secret;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
