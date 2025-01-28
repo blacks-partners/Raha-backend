@@ -35,6 +35,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
             Arrays.asList(
                 new AntPathRequestMatcher("/login"),
                 new AntPathRequestMatcher("/register"),
+                new AntPathRequestMatcher("/check-email"),
                 new AntPathRequestMatcher("/articles/*", HttpMethod.GET.toString()),
                 new AntPathRequestMatcher("/articles", HttpMethod.GET.toString())
             )
