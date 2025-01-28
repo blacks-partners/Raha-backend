@@ -129,7 +129,7 @@ public class ArticleRepository {
      */
     public Article articleDetails(Integer articleId) {
 
-        String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_content,a.created_at as a_created_at,a.updated_at as a_updated_at,u.id as u_id, u.name as u_name,c.id as c_id,c.content as c_content,c.created_at as c_created_at,c.updated_at as c_updated_at, e.id as e_id, e.name as e_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id LEFT OUTER JOIN comments as c on a.id =c.article_id LEFT OUTER JOIN  users as e  on e.id = c.user_id WHERE a.id=:articleId ORDER BY a.created_at DESC,a.id DESC,c.created_at DESC,c.id DESC";
+        String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_content,a.created_at as a_created_at,a.updated_at as a_updated_at,u.id as u_id, u.name as u_name,c.id as c_id,c.content as c_content,c.created_at as c_created_at,c.updated_at as c_updated_at, e.id as e_id, e.name as e_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id LEFT OUTER JOIN comments as c on a.id =c.article_id LEFT OUTER JOIN  users as e  on e.id = c.user_id WHERE a.id=:articleId ORDER BY a.created_at DESC,a.id DESC,c.created_at,c.id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
 
