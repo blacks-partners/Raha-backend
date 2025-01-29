@@ -35,7 +35,7 @@ public class UserService {
 
     /**
      * ユーザー情報詳細の取得。
-     * 
+     *
      * @param id ユーザーID
      * @return user ユーザー
      */
@@ -71,7 +71,7 @@ public class UserService {
      * メールアドレスからユーザー情報を取得
      *
      * @param email メールアドレス
-     * 
+     *
      * @return ユーザー情報
      */
     public User loadByEmail(String email) {
@@ -80,7 +80,7 @@ public class UserService {
 
     /**
      * JWTヘッダーを生成
-     * 
+     *
      * @param userId ユーザーID
      * @return JWTトークン付きHttpヘッダー
      */
@@ -106,7 +106,7 @@ public class UserService {
      * ユーザー情報の更新。
      *
      * @param userId ユーザーID
-     * 
+     *
      * @param form ユーザー更新フォームの内容。
      */
     public void update(Integer userId, UpdateUserForm form) {
