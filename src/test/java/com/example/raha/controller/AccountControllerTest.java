@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.example.raha.domain.User;
 import com.example.raha.error.GlobalExceptionHandler;
 import com.example.raha.error.invalidAuthenticationException;
+import com.example.raha.form.CheckEmailForm;
 import com.example.raha.form.LoginForm;
 import com.example.raha.service.SecurityUserService;
 import com.example.raha.service.UserService;
@@ -100,5 +101,44 @@ public class AccountControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").value("メールアドレス又はパスワードが誤っています"));
         verify(provider, times(1)).authenticate(any());
+    }
+
+    @Test
+    @DisplayName("メール重複がない場合のテスト")
+    public void testCheckEmail() throws Exception {
+        CheckEmailForm checkEmailForm = new CheckEmailForm();
+        checkEmailForm.setEmail("test@gmail.com");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(checkEmailForm);
+
+        when(userService.findByEmail(checkEmailForm.getEmail())).thenReturn(null);
+
+        mockMvc.perform(get("/check-email")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk());
+        verify(userService).findByEmail(checkEmailForm.getEmail());
+    }
+
+    @Test
+    @DisplayName("メール重複がある場合のテスト")
+    public void testCheckEmail_conflict() throws Exception {
+        CheckEmailForm checkEmailForm = new CheckEmailForm();
+        checkEmailForm.setEmail("demo_user@example.com");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(checkEmailForm);
+
+        when(userService.findByEmail(checkEmailForm.getEmail())).thenReturn(new User());
+
+        mockMvc.perform(get("/check-email")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("入力されたメールアドレスは既に登録されています"));
+
+        verify(userService).findByEmail(checkEmailForm.getEmail());
     }
 }
