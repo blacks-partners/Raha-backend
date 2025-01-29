@@ -19,8 +19,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * ユーザーに関するサービスクラス
- * 
- * @author T.Kanamaru
+ *
+ * @author S.Kanamaru
  */
 @Service
 @Transactional
@@ -35,6 +35,7 @@ public class UserService {
 
     /**
      * ユーザー情報詳細の取得。
+     * 
      * @param id ユーザーID
      * @return user ユーザー
      */
@@ -45,11 +46,11 @@ public class UserService {
 
     /**
      * ユーザー登録をする。
-     * 
+     *
      * @param user ユーザー
      * @return id ユーザーID
      */
-    public Integer register(RegisterUserForm form){
+    public Integer register(RegisterUserForm form) {
         form.setPassword(passwordEncoder.encode(form.getPassword()));
         Integer id = repository.insert(form);
         return id;
@@ -57,19 +58,20 @@ public class UserService {
 
     /**
      * メールアドレスを持っているユーザーを探す。
-     * 
+     *
      * @param email メールアドレス
      * @return user ユーザー
      */
-    public User findByEmail(String email){
+    public User findByEmail(String email) {
         User user = repository.findByEmail(email);
         return user;
     }
 
     /*
      * メールアドレスからユーザー情報を取得
-     * 
+     *
      * @param email メールアドレス
+     * 
      * @return ユーザー情報
      */
     public User loadByEmail(String email) {
@@ -78,6 +80,7 @@ public class UserService {
 
     /**
      * JWTヘッダーを生成
+     * 
      * @param userId ユーザーID
      * @return JWTトークン付きHttpヘッダー
      */
@@ -92,7 +95,7 @@ public class UserService {
 
     /**
      * ユーザーの削除。
-     * 
+     *
      * @param userId ユーザーID
      */
     public void delete(Integer userId) {
@@ -101,8 +104,9 @@ public class UserService {
 
     /*
      * ユーザー情報の更新。
-     * 
+     *
      * @param userId ユーザーID
+     * 
      * @param form ユーザー更新フォームの内容。
      */
     public void update(Integer userId, UpdateUserForm form) {

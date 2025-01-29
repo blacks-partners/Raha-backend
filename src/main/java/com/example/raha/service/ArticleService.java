@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 記事に関するサービスクラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Service
 @Transactional
@@ -51,10 +51,32 @@ public class ArticleService {
      * @return articleId 自動採番されたid
      */
     public Integer insert(ArticleForm article) {
-
         Integer articleId = articleRepository.insert(article);
 
         return articleId;
+    }
+
+    /**
+     * ユーザーの記事一覧を検索する。
+     * 
+     * @param userId
+     * @return ユーザーの記事一覧。
+     */
+    public List<Article> userArticleFindAll(Integer userId) {
+        List<Article> articleList = articleRepository.userArticleFindAll(userId);
+        return articleList;
+    }
+
+    /**
+     * 記事内容の更新
+     * 
+     * @param article   更新する記事情報
+     * @param articleId 対象の記事ID
+     * @param userId    記事を更新するユーザーID
+     */
+    public void update(ArticleForm article, Integer articleId, Integer userId) {
+        articleRepository.update(article, articleId, userId);
+
     }
 
     /**
@@ -62,9 +84,8 @@ public class ArticleService {
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId) {
-        articleRepository.delete(articleId);
-
+    public void delete(Integer articleId, Integer userId) {
+        articleRepository.delete(articleId, userId);
     }
 
 }

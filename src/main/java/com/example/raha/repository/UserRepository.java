@@ -20,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * ユーザーに関するリポジトリクラス
- * 
- * @author T.Kanamaru
+ *
+ * @author S.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -49,10 +49,10 @@ public class UserRepository {
     };
 
     /**
-     * ユーザー情報詳細の取得
-     * 
-     * @param id ユーザーID
-     * @return User ユーザー
+     * ユーザー情報を取得
+     *
+     * @param id ID
+     * @return ユーザー情報
      */
     public User load(Integer id) {
         String sql = "SELECT id,name,email,introduction,created_at,updated_at FROM users WHERE id=:id";
@@ -102,7 +102,7 @@ public class UserRepository {
 
     /**
      * メールアドレスからユーザー情報を取得
-     * 
+     *
      * @param email メールアドレス
      * @return user ユーザー情報
      */
@@ -116,9 +116,10 @@ public class UserRepository {
             return null;
         }
     }
+
     /**
      * ユーザーの削除
-     * 
+     *
      * @param userId ユーザーID
      */
     public void delete(Integer userId) {
@@ -129,8 +130,9 @@ public class UserRepository {
 
     /*
      * ユーザー情報の更新。
-     * 
+     *
      * @param userId ユーザーID
+     * 
      * @param form ユーザー更新フォームの内容。
      */
     public void update(Integer userId, UpdateUserForm form) {

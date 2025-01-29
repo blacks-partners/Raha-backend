@@ -29,17 +29,15 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class AuthorizeFilter extends OncePerRequestFilter {
     private final RequestMatcher matcher;
-    
+
     public AuthorizeFilter() {
         this.matcher = new OrRequestMatcher(
-            Arrays.asList(
-                new AntPathRequestMatcher("/login"),
-                new AntPathRequestMatcher("/register"),
-                new AntPathRequestMatcher("/check-email"),
-                new AntPathRequestMatcher("/articles/*", HttpMethod.GET.toString()),
-                new AntPathRequestMatcher("/articles", HttpMethod.GET.toString())
-            )
-        );
+                Arrays.asList(
+                        new AntPathRequestMatcher("/login"),
+                        new AntPathRequestMatcher("/register"),
+                        new AntPathRequestMatcher("/check-email"),
+                        new AntPathRequestMatcher("/articles/*", HttpMethod.GET.toString()),
+                        new AntPathRequestMatcher("/articles", HttpMethod.GET.toString())));
     }
 
     @Autowired
@@ -70,7 +68,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
                         .verify(xAuthToken.substring(7));
 
                 // デコードされたJWTから "userId" クレームを取得し、ユーザー名として使用
-                String userId = decodedJWT.getClaim("userId").toString();
+                Integer userId = Integer.parseInt(decodedJWT.getClaim("userId").toString());
 
                 // 認証情報を作成し、セキュリティコンテキストに設定
                 SecurityContextHolder.getContext()

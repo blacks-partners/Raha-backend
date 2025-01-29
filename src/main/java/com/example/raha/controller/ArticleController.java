@@ -1,16 +1,23 @@
 package com.example.raha.controller;
 
+import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.raha.domain.Article;
 import com.example.raha.form.ArticleForm;
@@ -21,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 記事に関するコントローラークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @RestController
 @RequiredArgsConstructor
@@ -63,9 +70,37 @@ public class ArticleController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insert(@RequestBody ArticleForm article) {
+    public ResponseEntity<Map<String, Integer>> insert(@RequestBody ArticleForm article) {
 
-        articleService.insert(article);
+        Integer articleId = articleService.insert(article);
+
+        Map<String, Integer> articleIdPassMap = new HashMap<>();
+        articleIdPassMap.put("articleId", articleId);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(articleId)
+                .toUri();
+
+        return ResponseEntity.created(location).body(articleIdPassMap);
+
+    }
+
+    /**
+     * 記事内容の更新
+     * 
+     * @param article   更新する記事情報
+     * @param articleId 対象の記事ID
+     */
+    @PutMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
+        Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
+            return;
+        }
+        articleService.update(article, articleId, userId);
     }
 
     /**
@@ -76,8 +111,11 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer articleId) {
-        articleService.delete(articleId);
-
+        Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userId == null) {
+            return;
+        }
+        articleService.delete(articleId, userId);
     }
 
 }
