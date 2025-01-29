@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するリポジトリクラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -42,6 +42,7 @@ public class UserRepository {
 
     /**
      * ユーザー情報を取得
+     * 
      * @param id ID
      * @return ユーザー情報
      */
@@ -56,6 +57,7 @@ public class UserRepository {
 
     /**
      * メールアドレスからユーザー情報を取得
+     * 
      * @param email メールアドレス
      * @return ユーザー情報
      */

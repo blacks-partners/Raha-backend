@@ -1,5 +1,6 @@
 package com.example.raha.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
 import com.example.raha.domain.Article;
 import com.example.raha.domain.Comment;
 import com.example.raha.domain.User;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * ユーザーに関するリポジトリークラス
  * 
- * @author 金丸天
+ * @author S.Kanamaru
  */
 @Repository
 @RequiredArgsConstructor
@@ -44,6 +44,18 @@ public class ArticleRepository {
         user.setName(rs.getString("u_name"));
 
         article.setUser(user);
+        return article;
+    };
+
+    private static final RowMapper<Article> USER_ARTICLE_ROWMAPPER = (rs, i) -> {
+        Article article = new Article();
+        article.setArticleId(rs.getInt("a_id"));
+        article.setTitle(rs.getString("a_title"));
+        article.setContent(rs.getString("a_content"));
+        article.setUser(null);
+        article.setCommentList(null);
+        article.setCreatedAt(rs.getTimestamp("a_created_at").toLocalDateTime());
+        article.setUpdatedAt(rs.getTimestamp("a_updated_at").toLocalDateTime());
         return article;
     };
 
@@ -117,7 +129,7 @@ public class ArticleRepository {
      */
     public Article articleDetails(Integer articleId) {
 
-        String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_content,a.created_at as a_created_at,a.updated_at as a_updated_at,u.id as u_id, u.name as u_name,c.id as c_id,c.content as c_content,c.created_at as c_created_at,c.updated_at as c_updated_at, e.id as e_id, e.name as e_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id LEFT OUTER JOIN comments as c on a.id =c.article_id LEFT OUTER JOIN  users as e  on e.id = c.user_id WHERE a.id=:articleId ORDER BY a.created_at DESC,a.id DESC,c.created_at DESC,c.id DESC";
+        String sql = "SELECT a.id as a_id,a.title as a_title,a.content as a_content,a.created_at as a_created_at,a.updated_at as a_updated_at,u.id as u_id, u.name as u_name,c.id as c_id,c.content as c_content,c.created_at as c_created_at,c.updated_at as c_updated_at, e.id as e_id, e.name as e_name FROM articles as a LEFT OUTER JOIN users as u on a.user_id = u.id LEFT OUTER JOIN comments as c on a.id =c.article_id LEFT OUTER JOIN  users as e  on e.id = c.user_id WHERE a.id=:articleId ORDER BY a.created_at DESC,a.id DESC,c.created_at,c.id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
 
@@ -134,7 +146,7 @@ public class ArticleRepository {
      */
     @SuppressWarnings("null")
     public Integer insert(ArticleForm article) {
-        String sql = "INSERT INTO articles (title,content,user_id) VALUES (:title,:content,:userId)";
+        String sql = "INSERT INTO articles (title,content,user_id) VALUES (:title,:content,:userId);";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
                 .addValue("content", article.getContent())
@@ -152,14 +164,47 @@ public class ArticleRepository {
     }
 
     /**
+     * ユーザーの投稿一覧を取得する。
+     * 
+     * @param userId
+     * @return ユーザーの記事一覧
+     */
+    public List<Article> userArticleFindAll(Integer userId) {
+        String sql = "SELECT articles.id as a_id,articles.title as a_title,articles.content as a_content,articles.created_at as a_created_at,articles.updated_at as a_updated_at FROM articles WHERE user_id = :userId ORDER BY a_created_at DESC,a_id DESC;";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+        List<Article> articleList = jdbcTemplate.query(sql, param, USER_ARTICLE_ROWMAPPER);
+        return articleList;
+    }
+
+    /**
+     * 記事内容の更新
+     * 
+     * @param article   更新する記事情報
+     * @param articleId 対象の記事ID
+     * @param userId    記事を更新するユーザーID
+     */
+    public void update(ArticleForm article, Integer articleId, Integer userId) {
+        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id AND user_id=:userId";
+
+        LocalDateTime now = LocalDateTime.now();
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
+                .addValue("content", article.getContent())
+                .addValue("id", articleId).addValue("updatedAt", now).addValue("userId", userId);
+
+        jdbcTemplate.update(sql, param);
+
+    }
+
+    /**
      * 該当の記事削除
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId) {
-        String sql = "DELETE FROM articles WHERE id=:id";
+    public void delete(Integer articleId, Integer userId) {
+        String sql = "DELETE FROM articles WHERE id=:id AND user_id=:userId";
 
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId).addValue("userId", userId);
 
         jdbcTemplate.update(sql, param);
 
