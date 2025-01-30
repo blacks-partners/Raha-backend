@@ -78,7 +78,8 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Integer commentId) {
-        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = 1;
         if (userId == null) {
             return;
         }

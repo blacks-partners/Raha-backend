@@ -34,10 +34,14 @@ public class SecurityConfig {
         // CORS（クロスオリジンリソースシェアリング）の設定を適用
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        http.authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register", "/check-email").permitAll()
-                .requestMatchers(HttpMethod.GET,"/articles", "/articles/*").permitAll()
-                .anyRequest().authenticated());
+        // http.authorizeHttpRequests(authz -> authz
+        // .requestMatchers("/login", "/register", "/check-email").permitAll()
+        // .requestMatchers(HttpMethod.GET,"/articles", "/articles/*").permitAll()
+        // .anyRequest().authenticated());
+
+        http.authorizeHttpRequests(a -> a
+                .anyRequest().permitAll());
+        
 
         // カスタムの認可フィルタをセキュリティフィルタチェーンに追加
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter.class)
