@@ -74,8 +74,8 @@ public class ArticleService {
      * @param articleId 対象の記事ID
      * @param userId    記事を更新するユーザーID
      */
-    public void update(ArticleForm article, Integer articleId, Integer userId) {
-        articleRepository.update(article, articleId, userId);
+    public void update(ArticleForm article, Integer articleId) {
+        articleRepository.update(article, articleId);
 
     }
 
@@ -84,8 +84,8 @@ public class ArticleService {
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId, Integer userId) {
-        articleRepository.delete(articleId, userId);
+    public void delete(Integer articleId) {
+        articleRepository.delete(articleId);
     }
 
 }

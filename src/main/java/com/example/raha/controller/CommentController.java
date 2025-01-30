@@ -64,11 +64,11 @@ public class CommentController {
     @PutMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
-        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userId == null) {
-            return;
-        }
-        commentService.update(comment, commentId, userId);
+        // Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // if (userId == null) {
+        //     return;
+        // }
+        commentService.update(comment, commentId);
     }
     /**
      * コメントの削除
@@ -79,10 +79,9 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Integer commentId) {
         // Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = 1;
-        if (userId == null) {
-            return;
-        }
-        commentService.delete(commentId, userId);
+        // if (userId == null) {
+        //     return;
+        // }
+        commentService.delete(commentId);
     }
 }

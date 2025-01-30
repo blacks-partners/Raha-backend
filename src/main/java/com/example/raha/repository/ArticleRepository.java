@@ -183,14 +183,14 @@ public class ArticleRepository {
      * @param articleId 対象の記事ID
      * @param userId    記事を更新するユーザーID
      */
-    public void update(ArticleForm article, Integer articleId, Integer userId) {
-        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id AND user_id=:userId";
+    public void update(ArticleForm article, Integer articleId) {
+        String sql = "UPDATE articles SET title=:title,content=:content,updated_at=:updatedAt WHERE id=:id";
 
         LocalDateTime now = LocalDateTime.now();
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("title", article.getTitle())
                 .addValue("content", article.getContent())
-                .addValue("id", articleId).addValue("updatedAt", now).addValue("userId", userId);
+                .addValue("id", articleId).addValue("updatedAt", now);
 
         jdbcTemplate.update(sql, param);
 
@@ -201,10 +201,10 @@ public class ArticleRepository {
      * 
      * @param articleId 記事ID
      */
-    public void delete(Integer articleId, Integer userId) {
-        String sql = "DELETE FROM articles WHERE id=:id AND user_id=:userId";
+    public void delete(Integer articleId) {
+        String sql = "DELETE FROM articles WHERE id=:id";
 
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId).addValue("userId", userId);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", articleId);
 
         jdbcTemplate.update(sql, param);
 

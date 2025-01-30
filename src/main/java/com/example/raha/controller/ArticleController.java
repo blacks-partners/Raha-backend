@@ -97,11 +97,10 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody ArticleForm article, @PathVariable Integer articleId) {
         // Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = 1;
-        if (userId == null) {
-            return;
-        }
-        articleService.update(article, articleId, userId);
+        // if (userId == null) {
+        //     return;
+        // }
+        articleService.update(article, articleId);
     }
 
     /**
@@ -113,11 +112,10 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer articleId) {
         // Integer userId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = 1;
-        if (userId == null) {
-            return;
-        }
-        articleService.delete(articleId, userId);
+        // if (userId == null) {
+        //     return;
+        // }
+        articleService.delete(articleId);
     }
 
 }

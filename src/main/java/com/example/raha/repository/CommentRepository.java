@@ -46,14 +46,13 @@ public class CommentRepository {
      * 
      * @param comment コメント情報
      */
-    public void update(CommentForm comment, Integer commentId, Integer userId) {
-        String sql = "UPDATE comments SET content=:content, updated_at=:updatedAt WHERE id=:id AND user_id=:userId";
+    public void update(CommentForm comment, Integer commentId) {
+        String sql = "UPDATE comments SET content=:content, updated_at=:updatedAt WHERE id=:id";
         LocalDateTime now = LocalDateTime.now();
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("content", comment.getContent())
                 .addValue("id", commentId)
-                .addValue("updatedAt", now)
-                .addValue("userId", userId);
+                .addValue("updatedAt", now);
         jdbcTemplate.update(sql, param);
     }
 
@@ -63,9 +62,9 @@ public class CommentRepository {
      * @param commentId コメントID
      * @param userId ユーザーID
      */
-    public void delete(Integer commentId, Integer userId) {
-        String sql = "DELETE FROM comments WHERE id = :id AND user_id=:userId";
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", commentId).addValue("userId", userId);
+    public void delete(Integer commentId) {
+        String sql = "DELETE FROM comments WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", commentId);
         jdbcTemplate.update(sql, param);
     }
 }
