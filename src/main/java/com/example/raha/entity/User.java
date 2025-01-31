@@ -1,18 +1,14 @@
 package com.example.raha.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -21,33 +17,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 記事のエンティティ
+ * ユーザーエンティティ
  * @author T.hosoda
  */
 @Entity
-@Table(name = "articles")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer articleId;
+    private Integer userId;
 
     @Column(nullable = false, length = 50)
-    private String title;
+    private String name;
 
-    @Column(nullable = false, length = 10000)
-    private String content;
+    @JsonIgnore
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JsonIgnore
+    @Column(nullable = false)
+    private String password;
 
-    @OneToMany(mappedBy = "article", orphanRemoval = true)
-    @JsonManagedReference
-    private List<Comment> commentList;
+    @Column(length = 150)
+    private String introduction;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -56,7 +53,7 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    public void prePresist() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

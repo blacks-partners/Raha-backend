@@ -1,9 +1,8 @@
 package com.example.raha.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,42 +11,42 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * 記事のエンティティ
+ * コメントエンティティ
  * @author T.hosoda
  */
 @Entity
-@Table(name = "articles")
-@Data
+@Table(name = "comments")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class Comment {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer articleId;
+    private Integer commentId;
 
-    @Column(nullable = false, length = 50)
-    private String title;
-
-    @Column(nullable = false, length = 10000)
+    @Column(nullable = false, length = 500)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "article", orphanRemoval = true)
-    @JsonManagedReference
-    private List<Comment> commentList;
+    @ManyToOne
+    @JoinColumn(name = "article_id", nullable = false)
+    @JsonBackReference
+    private Article article;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
