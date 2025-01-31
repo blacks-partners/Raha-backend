@@ -5,15 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
-import com.example.raha.domain.User;
+import com.example.raha.dto.UserDetailsDto;
+import com.example.raha.entity.User;
 import com.example.raha.form.RegisterUserForm;
 import com.example.raha.form.UpdateUserForm;
 import com.example.raha.repository.UserRepository;
+import com.example.raha.util.DtoMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository repository;
+    private final DtoMapper dtoMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${jwt.secret}")
@@ -39,8 +42,8 @@ public class UserService {
      * @param id ユーザーID
      * @return user ユーザー
      */
-    public User load(Integer id) {
-        User user = repository.load(id);
+    public UserDetailsDto load(Integer id) {
+        UserDetailsDto user = dtoMapper.toUserDetailsDto(repository.findById(id).orElse(null));
         return user;
     }
 
@@ -51,9 +54,11 @@ public class UserService {
      * @return id ユーザーID
      */
     public Integer register(RegisterUserForm form) {
-        form.setPassword(passwordEncoder.encode(form.getPassword()));
-        Integer id = repository.insert(form);
-        return id;
+        User user = new User();
+        BeanUtils.copyProperties(form, user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = repository.save(user);
+        return savedUser.getUserId();
     }
 
     /**
@@ -62,20 +67,13 @@ public class UserService {
      * @param email メールアドレス
      * @return user ユーザー
      */
-    public User findByEmail(String email) {
-        User user = repository.findByEmail(email);
-        return user;
-    }
-
-    /*
-     * メールアドレスからユーザー情報を取得
-     *
-     * @param email メールアドレス
-     *
-     * @return ユーザー情報
-     */
-    public User loadByEmail(String email) {
-        return repository.loadByEmail(email);
+    public UserDetailsDto findByEmail(String email) {
+        User user = repository.findUserByEmail(email).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        UserDetailsDto userDetailsDto = dtoMapper.toUserDetailsDto(user);
+        return userDetailsDto;
     }
 
     /**
@@ -99,7 +97,7 @@ public class UserService {
      * @param userId ユーザーID
      */
     public void delete(Integer userId) {
-        repository.delete(userId);
+        repository.deleteById(userId);
     }
 
     /*
@@ -110,7 +108,12 @@ public class UserService {
      * @param form ユーザー更新フォームの内容。
      */
     public void update(Integer userId, UpdateUserForm form) {
-        repository.update(userId, form);
+        User user = repository.findById(userId).orElse(null);
+        if (user == null) {
+            return;
+        }
+        BeanUtils.copyProperties(form, user);
+        repository.save(user);
     }
 
 }

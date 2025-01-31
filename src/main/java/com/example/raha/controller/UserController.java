@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.raha.domain.User;
 import com.example.raha.dto.ArticleDto;
+import com.example.raha.dto.UserDetailsDto;
 import com.example.raha.service.ArticleService;
 import com.example.raha.service.UserService;
 
@@ -43,9 +43,9 @@ public class UserController {
      */
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User userDetails(@PathVariable Integer userId) {
-        User user = userService.load(userId);
-        return user;
+    public UserDetailsDto userDetails(@PathVariable Integer userId) {
+        UserDetailsDto userDetailsDto = userService.load(userId);
+        return userDetailsDto;
     }
 
     /**

@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.raha.domain.User;
+
+import com.example.raha.dto.UserDetailsDto;
+import com.example.raha.entity.User;
 import com.example.raha.error.ConflictException;
 import com.example.raha.form.RegisterUserForm;
 import com.example.raha.service.UserService;
@@ -47,11 +49,11 @@ public class AccountController {
         try {
             // ユーザーの認証
             provider.authenticate(new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword()));
-            User user = userService.loadByEmail(form.getEmail());
+            UserDetailsDto userDto = userService.findByEmail(form.getEmail());
 
             // JWTトークンの生成
-            HttpHeaders headers = securityUserService.createJwtHeader(user.getUserId());
-            Map<String, Integer> response = Map.of("userId", user.getUserId());
+            HttpHeaders headers = securityUserService.createJwtHeader(userDto.getUserId());
+            Map<String, Integer> response = Map.of("userId", userDto.getUserId());
             return new ResponseEntity<>(response, headers, HttpStatus.OK);
 
         } catch (AuthenticationException e) {
@@ -68,7 +70,7 @@ public class AccountController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Map<String, Integer>> register(@RequestBody RegisterUserForm form) {
-        User registeredUser = userService.findByEmail(form.getEmail());
+        UserDetailsDto registeredUser = userService.findByEmail(form.getEmail());
         if (registeredUser != null) {
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
@@ -89,8 +91,8 @@ public class AccountController {
     @GetMapping("/check-email")
     @ResponseStatus(HttpStatus.OK)
     public void checkEmail(@RequestBody CheckEmailForm form) {
-        User findByEmail = userService.findByEmail(form.getEmail());
-        if (findByEmail != null) {
+        UserDetailsDto userDto = userService.findByEmail(form.getEmail());
+        if (userDto != null) {
             throw new ConflictException("入力されたメールアドレスは既に登録されています");
         }
     }

@@ -16,7 +16,6 @@ import com.example.raha.repository.ArticleRepository;
 import com.example.raha.repository.UserRepository;
 import com.example.raha.util.DtoMapper;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 /**
