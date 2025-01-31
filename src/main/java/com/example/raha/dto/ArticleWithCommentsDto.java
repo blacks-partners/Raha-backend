@@ -19,7 +19,7 @@ public class ArticleWithCommentsDto {
     private String title;
     private String content;
     private UserDto user;
-    private List<CommentDto> comments;
+    private List<CommentDto> commentList;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
