@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.raha.domain.Article;
 import com.example.raha.domain.User;
 import com.example.raha.dto.ArticleDto;
 import com.example.raha.service.ArticleService;

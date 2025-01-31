@@ -49,7 +49,11 @@ public class ArticleService {
      * @return article 記事+コメント情報
      */
     public ArticleWithCommentsDto articleDetails(Integer articleId) {
-        ArticleWithCommentsDto articleWithCommentsDto = dtoMapper.toArticleWithCommentsDto(articleRepository.findById(articleId).orElseThrow());
+        Article article = articleRepository.findById(articleId).orElse(null);
+        if (article == null) {
+            return null;
+        }
+        ArticleWithCommentsDto articleWithCommentsDto = dtoMapper.toArticleWithCommentsDto(article);
         return articleWithCommentsDto;
     }
 
