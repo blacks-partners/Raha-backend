@@ -13,6 +13,7 @@ import com.example.raha.entity.Article;
 import com.example.raha.entity.User;
 import com.example.raha.form.ArticleForm;
 import com.example.raha.repository.ArticleRepository;
+import com.example.raha.repository.UserRepository;
 import com.example.raha.util.DtoMapper;
 
 import jakarta.persistence.EntityManager;
@@ -29,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final EntityManager entityManager;
+    private final UserRepository userRepository;
     private final DtoMapper dtoMapper;
 
     /**
@@ -67,7 +68,10 @@ public class ArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleForm, article);
 
-        User user = entityManager.getReference(User.class, articleForm.getUserId());
+        User user = userRepository.findById(articleForm.getUserId()).orElse(null);
+        if (user == null) {
+            return null;
+        }
         article.setUser(user);
 
         Article savedArticle = articleRepository.save(article);
