@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.raha.domain.Article;
 import com.example.raha.domain.User;
+import com.example.raha.dto.ArticleDto;
 import com.example.raha.service.ArticleService;
 import com.example.raha.service.UserService;
 
@@ -55,8 +56,8 @@ public class UserController {
      * @return ユーザーの記事一覧。
      */
     @GetMapping("/{userId}/articles")
-    public List<Article> userArticleFindAll(@PathVariable Integer userId) {
-        List<Article> articleList = articleService.userArticleFindAll(userId);
+    public List<ArticleDto> userArticleFindAll(@PathVariable Integer userId) {
+        List<ArticleDto> articleList = articleService.userArticleFindAll(userId);
         return articleList;
     }
 
