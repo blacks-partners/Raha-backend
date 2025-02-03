@@ -2,15 +2,12 @@ package com.example.raha.config;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,13 +28,14 @@ public class AuthorizeFilter extends OncePerRequestFilter {
     private final RequestMatcher matcher;
 
     public AuthorizeFilter() {
-        this.matcher = new OrRequestMatcher(
-                Arrays.asList(
-                        new AntPathRequestMatcher("/login"),
-                        new AntPathRequestMatcher("/register"),
-                        new AntPathRequestMatcher("/check-email"),
-                        new AntPathRequestMatcher("/articles/*", HttpMethod.GET.toString()),
-                        new AntPathRequestMatcher("/articles", HttpMethod.GET.toString())));
+        // this.matcher = new OrRequestMatcher(
+        //         Arrays.asList(
+        //                 new AntPathRequestMatcher("/login"),
+        //                 new AntPathRequestMatcher("/register"),
+        //                 new AntPathRequestMatcher("/check-email"),
+        //                 new AntPathRequestMatcher("/articles/*", HttpMethod.GET.toString()),
+        //                 new AntPathRequestMatcher("/articles", HttpMethod.GET.toString())));
+        this.matcher = new AntPathRequestMatcher("/");
     }
 
     @Autowired
@@ -49,7 +47,7 @@ public class AuthorizeFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (!matcher.matches(request)) {
+        if (matcher.matches(request)) {
             // リクエストヘッダーから "X-AUTH-TOKEN" を取得
             String xAuthToken = request.getHeader("X-AUTH-TOKEN");
 

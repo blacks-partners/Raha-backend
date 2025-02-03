@@ -20,7 +20,6 @@ import java.net.URI;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 
 /**
@@ -64,11 +63,11 @@ public class CommentController {
     @PutMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@RequestBody CommentForm comment, @PathVariable Integer commentId) {
-        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userId == null) {
-            return;
-        }
-        commentService.update(comment, commentId, userId);
+        // Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // if (userId == null) {
+        //     return;
+        // }
+        commentService.update(comment, commentId);
     }
     /**
      * コメントの削除
@@ -78,10 +77,10 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Integer commentId) {
-        Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userId == null) {
-            return;
-        }
-        commentService.delete(commentId, userId);
+        // Integer userId = (Integer)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // if (userId == null) {
+        //     return;
+        // }
+        commentService.delete(commentId);
     }
 }

@@ -36,8 +36,8 @@ public class CommentService {
      * @param comment コメント情報
      * @param commentId 更新するコメントID
      */
-    public void update(CommentForm comment, Integer commentId, Integer userId) {
-        commentRepository.update(comment, commentId, userId);
+    public void update(CommentForm comment, Integer commentId) {
+        commentRepository.update(comment, commentId);
     }
     
     /**
@@ -45,7 +45,7 @@ public class CommentService {
      * 
      * @param commentId コメントID
      */
-    public void delete(Integer commentId, Integer userId) {
-        commentRepository.delete(commentId, userId);
+    public void delete(Integer commentId) {
+        commentRepository.delete(commentId);
     }
 }
