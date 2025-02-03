@@ -47,7 +47,7 @@ public class ArticleController {
     @GetMapping("")
     public List<ArticleDto> findAllArticles() {
         Sort sort = Sort.by("createdAt").descending()
-                        .and(Sort.by("articleId").descending());
+                        .and(Sort.by("articleId").ascending());
         List<ArticleDto> articleList = articleService.findAll(sort);
 
         return articleList;
