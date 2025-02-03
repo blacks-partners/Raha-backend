@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.raha.domain.User;
+import com.example.raha.entity.User;
 import com.example.raha.repository.UserRepository;
 
 /**
@@ -33,7 +33,7 @@ public class SecurityUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.loadByEmail(email);
+        User user = repository.findUserByEmail(email).orElse(null);
         if (user == null) {
             return null;
         }

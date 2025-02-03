@@ -2,6 +2,7 @@ package com.example.raha.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.raha.domain.Article;
-import com.example.raha.domain.User;
+import com.example.raha.dto.ArticleDto;
+import com.example.raha.dto.UserDetailsDto;
 import com.example.raha.service.ArticleService;
 import com.example.raha.service.UserService;
 
@@ -43,9 +44,9 @@ public class UserController {
      */
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User userDetails(@PathVariable Integer userId) {
-        User user = userService.load(userId);
-        return user;
+    public UserDetailsDto userDetails(@PathVariable Integer userId) {
+        UserDetailsDto userDetailsDto = userService.load(userId);
+        return userDetailsDto;
     }
 
     /**
@@ -55,8 +56,10 @@ public class UserController {
      * @return ユーザーの記事一覧。
      */
     @GetMapping("/{userId}/articles")
-    public List<Article> userArticleFindAll(@PathVariable Integer userId) {
-        List<Article> articleList = articleService.userArticleFindAll(userId);
+    public List<ArticleDto> userArticleFindAll(@PathVariable Integer userId) {
+        Sort sort = Sort.by("createdAt").descending()
+                .and(Sort.by("articleId").descending());
+        List<ArticleDto> articleList = articleService.userArticleFindAll(userId, sort);
         return articleList;
     }
 

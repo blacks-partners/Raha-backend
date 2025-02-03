@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.raha.domain.Article;
+import com.example.raha.dto.ArticleDto;
+import com.example.raha.dto.ArticleWithCommentsDto;
 import com.example.raha.form.ArticleForm;
 import com.example.raha.service.ArticleService;
 
@@ -43,8 +45,10 @@ public class ArticleController {
      * @return articleList 記事リスト
      */
     @GetMapping("")
-    public List<Article> findAllArticles() {
-        List<Article> articleList = articleService.findAll();
+    public List<ArticleDto> findAllArticles() {
+        Sort sort = Sort.by("createdAt").descending()
+                        .and(Sort.by("articleId").descending());
+        List<ArticleDto> articleList = articleService.findAll(sort);
 
         return articleList;
     }
@@ -56,8 +60,8 @@ public class ArticleController {
      * @return article 記事+コメント情報
      */
     @GetMapping("/{articleId}")
-    public Article details(@PathVariable Integer articleId) {
-        Article article = articleService.articleDetails(articleId);
+    public ArticleWithCommentsDto details(@PathVariable Integer articleId) {
+        ArticleWithCommentsDto article = articleService.articleDetails(articleId);
 
         return article;
     }
