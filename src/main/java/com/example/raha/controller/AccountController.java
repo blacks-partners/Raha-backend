@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.raha.dto.UserDetailsDto;
-import com.example.raha.entity.User;
 import com.example.raha.error.ConflictException;
 import com.example.raha.form.RegisterUserForm;
 import com.example.raha.service.UserService;

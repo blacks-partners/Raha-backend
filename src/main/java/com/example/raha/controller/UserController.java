@@ -2,6 +2,7 @@ package com.example.raha.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,7 +57,9 @@ public class UserController {
      */
     @GetMapping("/{userId}/articles")
     public List<ArticleDto> userArticleFindAll(@PathVariable Integer userId) {
-        List<ArticleDto> articleList = articleService.userArticleFindAll(userId);
+        Sort sort = Sort.by("createdAt").descending()
+                .and(Sort.by("articleId").descending());
+        List<ArticleDto> articleList = articleService.userArticleFindAll(userId, sort);
         return articleList;
     }
 

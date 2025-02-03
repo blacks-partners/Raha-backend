@@ -2,6 +2,7 @@ package com.example.raha.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,7 @@ import com.example.raha.entity.Article;
  * @author T.hosoda
  */
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
-    public List<Article> findByUserUserId(Integer userId);
+    public List<Article> findByUserUserId(Integer userId, Sort sort);
 
     @Modifying
     @Query("""

@@ -84,8 +84,8 @@ public class ArticleService {
      * @param userId
      * @return ユーザーの記事一覧。
      */
-    public List<ArticleDto> userArticleFindAll(Integer userId) {
-        List<ArticleDto> articleList = dtoMapper.toArticleDtoList(articleRepository.findByUserUserId(userId));
+    public List<ArticleDto> userArticleFindAll(Integer userId, Sort sort) {
+        List<ArticleDto> articleList = dtoMapper.toArticleDtoList(articleRepository.findByUserUserId(userId, sort));
         return articleList;
     }
 
